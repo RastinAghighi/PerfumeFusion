@@ -6,6 +6,7 @@ signal new_perfume_discovered(perfume_data, tier)
 const MAX_TIER := 20
 const PerfumeItemScene := preload("res://scenes/grid/PerfumeItem.tscn")
 const MergeParticlesScene := preload("res://scenes/effects/MergeParticles.tscn")
+const InfoCardScene := preload("res://scenes/ui/InfoCard.tscn")
 
 
 func execute_merge(item_a, item_b, target_slot, _grid) -> bool:
@@ -139,7 +140,13 @@ func _animate_merge(item_a, item_b, target_slot, new_tier: int, new_data: Dictio
 	bounce.tween_property(new_item, "scale", Vector2(1.15, 1.15), 0.15)
 	bounce.tween_property(new_item, "scale", Vector2(1, 1), 0.1)
 
-	var url := String(new_data.get("url", ""))
+	print("Merged to tier ", new_tier)
+	print("New perfume: ", new_data.get("name", "unknown"))
+	print("Unlocked list size: ", SaveManager.data.unlocked_perfumes.size())
+	var url = new_data.get("url", new_data.get("name", ""))
+	print("Perfume URL: ", url)
+	print("Already unlocked: ", url in SaveManager.data.unlocked_perfumes)
+
 	var unlocked: Array = SaveManager.data.get("unlocked_perfumes", [])
 	if url != "" and not unlocked.has(url):
 		unlocked.append(url)
@@ -148,6 +155,9 @@ func _animate_merge(item_a, item_b, target_slot, new_tier: int, new_data: Dictio
 		stats["total_perfumes_discovered"] = int(stats.get("total_perfumes_discovered", 0)) + 1
 		SaveManager.data["stats"] = stats
 		AudioManager.play_unlock()
+		var card := InfoCardScene.instantiate()
+		get_tree().root.add_child(card)
+		card.show_perfume(new_data, new_tier)
 		emit_signal("new_perfume_discovered", new_data, new_tier)
 
 	var stats2: Dictionary = SaveManager.data.get("stats", {})

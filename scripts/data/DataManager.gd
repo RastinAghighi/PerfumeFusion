@@ -1,6 +1,6 @@
 extends Node
 
-const PERFUMES_PATH := "res://data/perfumes_slim.json"
+const PERFUMES_PATH := "res://data/perfumes_filtered.json"
 const TIER_COUNT := 20
 
 var perfumes: Array = []
