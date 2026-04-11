@@ -12,20 +12,6 @@ func _ready() -> void:
 		if child.has_method("initialize"):
 			child.initialize(i)
 		i += 1
-	_test_spawn_perfumes()
-
-
-func _test_spawn_perfumes() -> void:
-	for idx in range(10):
-		var data: Dictionary = DataManager.get_random_perfume(1)
-		if data.is_empty():
-			continue
-		var slot = get_slot(idx)
-		if slot == null or not slot.is_empty():
-			continue
-		var item := PerfumeItemScene.instantiate()
-		slot.place_item(item)
-		item.setup(1, data)
 
 
 func attempt_drop(item, target_slot) -> void:

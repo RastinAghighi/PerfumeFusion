@@ -23,6 +23,7 @@ config/features=PackedStringArray("4.6", "Forward Plus")
 DataManager="*res://scripts/data/DataManager.gd"
 SaveManager="*res://scripts/managers/SaveManager.gd"
 MergeManager="*res://scripts/grid/MergeManager.gd"
+SpawnManager="*res://scripts/managers/SpawnManager.gd"
 
 [display]
 

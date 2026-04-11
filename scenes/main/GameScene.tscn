@@ -1,20 +1,23 @@
 [gd_scene format=3 uid="uid://bps0qg5em105i"]
 
-[ext_resource type="Script" path="res://scripts/grid/Grid.gd" id="1_grid"]
-[ext_resource type="PackedScene" uid="uid://b1gridslot00001" path="res://scenes/grid/GridSlot.tscn" id="2_slot"]
+[ext_resource type="Script" uid="uid://btvf3spsy6o3l" path="res://scripts/grid/Grid.gd" id="1_grid"]
+[ext_resource type="PackedScene" uid="uid://b7oyqqgk8105i" path="res://scenes/grid/GridSlot.tscn" id="2_slot"]
+[ext_resource type="Script" uid="uid://dki8h4jgli71f" path="res://scripts/main/GameScene.gd" id="3_game"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
 bg_color = Color(0.08, 0.06, 0.12, 1)
 
-[node name="GameScene" type="Control"]
+[node name="GameScene" type="Control" unique_id=344781548]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_bottom = -543.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("3_game")
 
-[node name="Background" type="Panel" parent="."]
+[node name="Background" type="Panel" parent="." unique_id=655366157]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,7 +26,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_bg")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1115228177]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -35,14 +38,14 @@ theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1687697744]
 layout_mode = 2
 
-[node name="TopHUD" type="Control" parent="MarginContainer/VBoxContainer"]
+[node name="TopHUD" type="Control" parent="MarginContainer/VBoxContainer" unique_id=1329421342]
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 
-[node name="Grid" type="GridContainer" parent="MarginContainer/VBoxContainer"]
+[node name="Grid" type="GridContainer" parent="MarginContainer/VBoxContainer" unique_id=735173651]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -51,81 +54,81 @@ theme_override_constants/v_separation = 10
 columns = 5
 script = ExtResource("1_grid")
 
-[node name="GridSlot0" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+[node name="GridSlot0" parent="MarginContainer/VBoxContainer/Grid" unique_id=1461518688 instance=ExtResource("2_slot")]
 layout_mode = 2
 
-[node name="GridSlot1" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+[node name="GridSlot1" parent="MarginContainer/VBoxContainer/Grid" unique_id=1106344131 instance=ExtResource("2_slot")]
 layout_mode = 2
 
-[node name="GridSlot2" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+[node name="GridSlot2" parent="MarginContainer/VBoxContainer/Grid" unique_id=1495635970 instance=ExtResource("2_slot")]
 layout_mode = 2
 
-[node name="GridSlot3" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+[node name="GridSlot3" parent="MarginContainer/VBoxContainer/Grid" unique_id=1838694420 instance=ExtResource("2_slot")]
 layout_mode = 2
 
-[node name="GridSlot4" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+[node name="GridSlot4" parent="MarginContainer/VBoxContainer/Grid" unique_id=1505081252 instance=ExtResource("2_slot")]
 layout_mode = 2
 
-[node name="GridSlot5" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+[node name="GridSlot5" parent="MarginContainer/VBoxContainer/Grid" unique_id=754871112 instance=ExtResource("2_slot")]
 layout_mode = 2
 
-[node name="GridSlot6" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+[node name="GridSlot6" parent="MarginContainer/VBoxContainer/Grid" unique_id=1229808101 instance=ExtResource("2_slot")]
 layout_mode = 2
 
-[node name="GridSlot7" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+[node name="GridSlot7" parent="MarginContainer/VBoxContainer/Grid" unique_id=1880250355 instance=ExtResource("2_slot")]
 layout_mode = 2
 
-[node name="GridSlot8" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+[node name="GridSlot8" parent="MarginContainer/VBoxContainer/Grid" unique_id=775905590 instance=ExtResource("2_slot")]
 layout_mode = 2
 
-[node name="GridSlot9" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+[node name="GridSlot9" parent="MarginContainer/VBoxContainer/Grid" unique_id=1955358615 instance=ExtResource("2_slot")]
 layout_mode = 2
 
-[node name="GridSlot10" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+[node name="GridSlot10" parent="MarginContainer/VBoxContainer/Grid" unique_id=729603661 instance=ExtResource("2_slot")]
 layout_mode = 2
 
-[node name="GridSlot11" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+[node name="GridSlot11" parent="MarginContainer/VBoxContainer/Grid" unique_id=450814484 instance=ExtResource("2_slot")]
 layout_mode = 2
 
-[node name="GridSlot12" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+[node name="GridSlot12" parent="MarginContainer/VBoxContainer/Grid" unique_id=1818378873 instance=ExtResource("2_slot")]
 layout_mode = 2
 
-[node name="GridSlot13" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+[node name="GridSlot13" parent="MarginContainer/VBoxContainer/Grid" unique_id=610907145 instance=ExtResource("2_slot")]
 layout_mode = 2
 
-[node name="GridSlot14" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+[node name="GridSlot14" parent="MarginContainer/VBoxContainer/Grid" unique_id=62880055 instance=ExtResource("2_slot")]
 layout_mode = 2
 
-[node name="GridSlot15" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+[node name="GridSlot15" parent="MarginContainer/VBoxContainer/Grid" unique_id=2011900086 instance=ExtResource("2_slot")]
 layout_mode = 2
 
-[node name="GridSlot16" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+[node name="GridSlot16" parent="MarginContainer/VBoxContainer/Grid" unique_id=1814829410 instance=ExtResource("2_slot")]
 layout_mode = 2
 
-[node name="GridSlot17" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+[node name="GridSlot17" parent="MarginContainer/VBoxContainer/Grid" unique_id=1524240691 instance=ExtResource("2_slot")]
 layout_mode = 2
 
-[node name="GridSlot18" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+[node name="GridSlot18" parent="MarginContainer/VBoxContainer/Grid" unique_id=291812341 instance=ExtResource("2_slot")]
 layout_mode = 2
 
-[node name="GridSlot19" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+[node name="GridSlot19" parent="MarginContainer/VBoxContainer/Grid" unique_id=1837484808 instance=ExtResource("2_slot")]
 layout_mode = 2
 
-[node name="GridSlot20" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+[node name="GridSlot20" parent="MarginContainer/VBoxContainer/Grid" unique_id=1689462605 instance=ExtResource("2_slot")]
 layout_mode = 2
 
-[node name="GridSlot21" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+[node name="GridSlot21" parent="MarginContainer/VBoxContainer/Grid" unique_id=481031324 instance=ExtResource("2_slot")]
 layout_mode = 2
 
-[node name="GridSlot22" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+[node name="GridSlot22" parent="MarginContainer/VBoxContainer/Grid" unique_id=897083607 instance=ExtResource("2_slot")]
 layout_mode = 2
 
-[node name="GridSlot23" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+[node name="GridSlot23" parent="MarginContainer/VBoxContainer/Grid" unique_id=646964422 instance=ExtResource("2_slot")]
 layout_mode = 2
 
-[node name="GridSlot24" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+[node name="GridSlot24" parent="MarginContainer/VBoxContainer/Grid" unique_id=1609000934 instance=ExtResource("2_slot")]
 layout_mode = 2
 
-[node name="BottomBar" type="Control" parent="MarginContainer/VBoxContainer"]
+[node name="BottomBar" type="Control" parent="MarginContainer/VBoxContainer" unique_id=1721799136]
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
