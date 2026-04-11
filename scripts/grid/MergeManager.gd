@@ -19,6 +19,17 @@ func execute_merge(item_a, item_b, target_slot, _grid) -> bool:
 		print("MAX TIER REACHED!")
 		return false
 
+	var lucky_triggered: bool = false
+	var lucky_level: int = int(SaveManager.data.get("upgrades", {}).get("lucky_merge_level", 0))
+	var lucky_chance: float = 0.0
+	if lucky_level == 1:
+		lucky_chance = 0.10
+	elif lucky_level >= 2:
+		lucky_chance = 0.20
+	if lucky_chance > 0.0 and randf() < lucky_chance and new_tier + 1 <= MAX_TIER:
+		new_tier += 1
+		lucky_triggered = true
+
 	var new_data: Dictionary = DataManager.get_random_perfume(new_tier)
 	if new_data.is_empty():
 		push_warning("MergeManager: no perfume available for tier %d" % new_tier)
@@ -26,7 +37,45 @@ func execute_merge(item_a, item_b, target_slot, _grid) -> bool:
 
 	var perfume_color: Color = DataManager.get_tier_color(new_tier)
 	_animate_merge(item_a, item_b, target_slot, new_tier, new_data, perfume_color)
+	if lucky_triggered:
+		_show_lucky_flash()
 	return true
+
+
+func _show_lucky_flash() -> void:
+	var layer := CanvasLayer.new()
+	layer.layer = 50
+	get_tree().root.add_child(layer)
+
+	var label := Label.new()
+	label.text = "LUCKY!"
+	label.add_theme_font_size_override("font_size", 64)
+	label.add_theme_color_override("font_color", Color(1.0, 0.9, 0.3, 1.0))
+	label.add_theme_color_override("font_outline_color", Color(0.2, 0.1, 0.0, 1.0))
+	label.add_theme_constant_override("outline_size", 8)
+	label.anchor_left = 0.5
+	label.anchor_right = 0.5
+	label.anchor_top = 0.3
+	label.anchor_bottom = 0.3
+	label.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	label.grow_vertical = Control.GROW_DIRECTION_BOTH
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	layer.add_child(label)
+
+	await get_tree().process_frame
+	label.pivot_offset = label.size * 0.5
+	label.scale = Vector2(0.4, 0.4)
+	label.modulate.a = 0.0
+
+	var tween := label.create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(label, "scale", Vector2(1.2, 1.2), 0.2)
+	tween.tween_property(label, "modulate:a", 1.0, 0.2)
+	tween.set_parallel(false)
+	tween.tween_interval(0.6)
+	tween.tween_property(label, "modulate:a", 0.0, 0.3)
+	tween.tween_callback(layer.queue_free)
 
 
 func _animate_merge(item_a, item_b, target_slot, new_tier: int, new_data: Dictionary, perfume_color: Color) -> void:

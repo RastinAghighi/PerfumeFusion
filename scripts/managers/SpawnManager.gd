@@ -2,7 +2,7 @@ extends Node
 
 const PerfumeItemScene := preload("res://scenes/grid/PerfumeItem.tscn")
 
-const SPAWN_INTERVALS := [5.0, 4.0, 3.0, 2.0]
+const SPAWN_INTERVALS := [3.0, 2.5, 2.0, 1.5]
 const FRENZY_INTERVAL := 0.5
 const MANUAL_SPAWN_COST := 10
 

@@ -2,6 +2,7 @@ extends CanvasLayer
 
 const BUY_COST: int = 10
 const EncyclopediaScene := preload("res://scenes/ui/Encyclopedia.tscn")
+const ShopScene := preload("res://scenes/ui/Shop.tscn")
 
 @onready var essence_label: Label = $TopBar/Margin/HBox/EssenceBox/EssenceLabel
 @onready var essence_icon: Panel = $TopBar/Margin/HBox/EssenceBox/EssenceIcon
@@ -63,7 +64,8 @@ func _on_collection_pressed() -> void:
 
 
 func _on_shop_pressed() -> void:
-	print("open shop")
+	var shop := ShopScene.instantiate()
+	get_tree().root.add_child(shop)
 
 
 func _on_settings_pressed() -> void:
