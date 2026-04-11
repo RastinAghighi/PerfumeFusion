@@ -12,3 +12,6 @@ data/failed_urls.txt
 .vscode/
 .idea/
 *.swp
+
+# Godot exports
+export/

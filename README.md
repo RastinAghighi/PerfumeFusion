@@ -1,4 +1,51 @@
-# PerfumeFusion — Scraper
+# PerfumeFusion
+
+A Godot 4.6 perfume merge/fusion game, plus the Python scraper that produces
+its content.
+
+## Web export (Godot)
+
+The game is built for the web (HTML5). Before exporting:
+
+1. Regenerate the slim data file if `data/perfumes.json` has changed:
+
+   ```powershell
+   py scripts/data/optimize_data.py
+   ```
+
+   This strips the `url` field (only used by the scraper) and writes
+   `data/perfumes_slim.json`, which is what the game loads at runtime.
+   Saves ~6.5 MB off the build.
+
+2. In Godot: **Project → Export → Web → Export Project**, target
+   `export/web/index.html`. The `Web` preset is already defined in
+   `export_presets.cfg` and excludes the scraper, raw `perfumes.json`,
+   and other non-runtime files.
+
+3. If the Web export template is missing, install it via
+   **Editor → Manage Export Templates**.
+
+**Build size target: under 15 MB total** (`index.wasm` + `index.pck` + html shell).
+If you blow past that, check `index.pck` first — it's almost certainly the
+data file or unstripped assets.
+
+### Test the build locally
+
+```powershell
+cd export/web
+py -m http.server 8000
+```
+
+Then open <http://localhost:8000>. Godot 4 web exports require
+cross-origin isolation headers (COOP/COEP) for threading; `python -m http.server`
+doesn't send them, so threads will be disabled in the local test. That's fine
+for smoke-testing — for a proper production-equivalent test, host on a server
+that sets `Cross-Origin-Opener-Policy: same-origin` and
+`Cross-Origin-Embedder-Policy: require-corp`.
+
+Browser save data (`user://`) maps to IndexedDB, scoped per origin.
+
+## Scraper
 
 Python scraper that pulls perfume data from Fragrantica.com and writes it to
 `data/perfumes.json`. The output is game content for a perfume merge/fusion game.
