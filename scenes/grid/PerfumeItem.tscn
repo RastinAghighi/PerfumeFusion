@@ -1,0 +1,61 @@
+[gd_scene load_steps=3 format=3 uid="uid://bperfumeitem001"]
+
+[ext_resource type="Script" path="res://scripts/grid/PerfumeItem.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bottle"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[node name="PerfumeItem" type="Control"]
+custom_minimum_size = Vector2(170, 170)
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_right = 170.0
+offset_bottom = 170.0
+mouse_filter = 1
+script = ExtResource("1_script")
+
+[node name="BottleShape" type="Panel" parent="."]
+offset_left = 25.0
+offset_top = 10.0
+offset_right = 145.0
+offset_bottom = 160.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bottle")
+
+[node name="TierLabel" type="Label" parent="."]
+offset_left = 30.0
+offset_top = 12.0
+offset_right = 90.0
+offset_bottom = 44.0
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 2
+text = "T1"
+
+[node name="NameLabel" type="Label" parent="."]
+offset_left = 5.0
+offset_top = 130.0
+offset_right = 165.0
+offset_bottom = 148.0
+theme_override_font_sizes/font_size = 12
+text = "Name"
+horizontal_alignment = 1
+text_overrun_behavior = 3
+clip_text = true
+
+[node name="BrandLabel" type="Label" parent="."]
+offset_left = 5.0
+offset_top = 148.0
+offset_right = 165.0
+offset_bottom = 164.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+text = "Brand"
+horizontal_alignment = 1
+text_overrun_behavior = 3
+clip_text = true

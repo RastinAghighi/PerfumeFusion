@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://b1gridslot00001"]
+[gd_scene format=3 uid="uid://b7oyqqgk8105i"]
 
 [ext_resource type="Script" path="res://scripts/grid/GridSlot.gd" id="1_script"]
 

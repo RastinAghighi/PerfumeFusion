@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://b1gamescene0001"]
+[gd_scene format=3 uid="uid://bps0qg5em105i"]
 
 [ext_resource type="Script" path="res://scripts/grid/Grid.gd" id="1_grid"]
 [ext_resource type="PackedScene" uid="uid://b1gridslot00001" path="res://scenes/grid/GridSlot.tscn" id="2_slot"]
