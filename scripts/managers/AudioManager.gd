@@ -1,8 +1,10 @@
 extends Node
 
 const SAMPLE_RATE: int = 22050
+const BGM_GROUP: String = "bgm"
 
-var master_volume: float = 0.8
+var music_volume: float = 0.8
+var sfx_volume: float = 1.0
 var muted: bool = false
 
 var _streams: Dictionary = {}
@@ -17,17 +19,65 @@ func _ready() -> void:
 	_streams["essence"] = _make_clink()
 	_streams["rare_drop"] = _make_whoosh()
 	_streams["frenzy"] = _make_powerup()
+	_load_prefs()
 
 
 # ---------- public API ----------
 
-func set_master_volume(v: float) -> void:
-	master_volume = clamp(v, 0.0, 1.0)
+func set_music_volume(vol: float) -> void:
+	music_volume = clamp(vol, 0.0, 1.0)
+	_apply_music_volume()
+	_save_prefs()
+
+
+func set_sfx_volume(vol: float) -> void:
+	sfx_volume = clamp(vol, 0.0, 1.0)
+	_save_prefs()
+
+
+func set_mute(m: bool) -> void:
+	muted = m
+	_apply_music_volume()
+	_save_prefs()
 
 
 func toggle_mute() -> bool:
-	muted = not muted
+	set_mute(not muted)
 	return muted
+
+
+func register_bgm_player(player: AudioStreamPlayer) -> void:
+	if not player.is_in_group(BGM_GROUP):
+		player.add_to_group(BGM_GROUP)
+	_apply_music_volume()
+
+
+func _apply_music_volume() -> void:
+	var tree := get_tree()
+	if tree == null:
+		return
+	var effective: float = 0.0 if muted else music_volume
+	var db: float = linear_to_db(max(effective, 0.0001))
+	for n in tree.get_nodes_in_group(BGM_GROUP):
+		if n is AudioStreamPlayer:
+			(n as AudioStreamPlayer).volume_db = db
+
+
+func _load_prefs() -> void:
+	var audio: Dictionary = SaveManager.data.get("audio", {})
+	music_volume = clamp(float(audio.get("music_volume", 0.8)), 0.0, 1.0)
+	sfx_volume = clamp(float(audio.get("sfx_volume", 1.0)), 0.0, 1.0)
+	muted = bool(audio.get("muted", false))
+	call_deferred("_apply_music_volume")
+
+
+func _save_prefs() -> void:
+	SaveManager.data["audio"] = {
+		"music_volume": music_volume,
+		"sfx_volume": sfx_volume,
+		"muted": muted,
+	}
+	SaveManager.save_game()
 
 
 func play_merge() -> void: _play("merge")
@@ -41,14 +91,14 @@ func play_frenzy() -> void: _play("frenzy", 1.1)
 
 
 func _play(key: String, volume_scale: float = 1.0) -> void:
-	if muted or master_volume <= 0.0:
+	if muted or sfx_volume <= 0.0:
 		return
 	var stream: AudioStream = _streams.get(key)
 	if stream == null:
 		return
 	var player := AudioStreamPlayer.new()
 	player.stream = stream
-	player.volume_db = linear_to_db(clamp(master_volume * volume_scale, 0.0001, 1.0))
+	player.volume_db = linear_to_db(clamp(sfx_volume * volume_scale, 0.0001, 1.0))
 	get_tree().root.add_child(player)
 	player.play()
 	player.finished.connect(player.queue_free)

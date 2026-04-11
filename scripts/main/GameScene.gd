@@ -12,6 +12,7 @@ func _ready() -> void:
 	EconomyManager.essence = int(SaveManager.data.get("essence", 0))
 
 	add_child(HUDScene.instantiate())
+	AudioManager.register_bgm_player($BGM)
 
 	if not MergeManager.new_perfume_discovered.is_connected(_on_new_perfume_discovered):
 		MergeManager.new_perfume_discovered.connect(_on_new_perfume_discovered)

@@ -6,6 +6,7 @@ const FRENZY_DURATION: float = 30.0
 
 const EncyclopediaScene := preload("res://scenes/ui/Encyclopedia.tscn")
 const ShopScene := preload("res://scenes/ui/Shop.tscn")
+const SettingsScene := preload("res://scenes/ui/Settings.tscn")
 
 @onready var essence_label: Label = $TopBar/Margin/HBox/EssenceBox/EssenceLabel
 @onready var essence_icon: Panel = $TopBar/Margin/HBox/EssenceBox/EssenceIcon
@@ -107,7 +108,8 @@ func _on_shop_pressed() -> void:
 
 
 func _on_settings_pressed() -> void:
-	print("open settings")
+	var settings := SettingsScene.instantiate()
+	get_tree().root.add_child(settings)
 
 
 func _on_rare_drop_available() -> void:

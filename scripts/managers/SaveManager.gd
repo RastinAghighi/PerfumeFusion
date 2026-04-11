@@ -31,6 +31,11 @@ func get_default_data() -> Dictionary:
 			"highest_tier": 0,
 			"total_perfumes_discovered": 0,
 		},
+		"audio": {
+			"music_volume": 0.8,
+			"sfx_volume": 1.0,
+			"muted": false,
+		},
 	}
 
 

@@ -131,3 +131,7 @@ layout_mode = 2
 [node name="BottomSpacer" type="Control" parent="MarginContainer/VBoxContainer" unique_id=1721799136]
 custom_minimum_size = Vector2(0, 110)
 layout_mode = 2
+
+[node name="BGM" type="AudioStreamPlayer" parent="." groups=["bgm"]]
+autoplay = true
+bus = &"Master"
