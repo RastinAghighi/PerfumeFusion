@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://bperfumeitem001"]
+[gd_scene format=3 uid="uid://36vr0f0fawno"]
 
 [ext_resource type="Script" path="res://scripts/grid/PerfumeItem.gd" id="1_script"]
 
