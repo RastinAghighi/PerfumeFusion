@@ -16,7 +16,7 @@ func _ready() -> void:
 
 
 func _test_spawn_perfumes() -> void:
-	for idx in range(5):
+	for idx in range(10):
 		var data: Dictionary = DataManager.get_random_perfume(1)
 		if data.is_empty():
 			continue
@@ -40,8 +40,9 @@ func attempt_drop(item, target_slot) -> void:
 		return
 	var other = target_slot.occupied_item
 	if other != null and "tier" in other and other.tier == item.tier:
-		print("MERGE! Tier ", item.tier, " + Tier ", other.tier)
-		_return_to_origin(item)
+		var success: bool = MergeManager.execute_merge(item, other, target_slot, self)
+		if not success:
+			_return_to_origin(item)
 	else:
 		_return_to_origin(item)
 
