@@ -7,6 +7,7 @@ const FRENZY_DURATION: float = 30.0
 const EncyclopediaScene := preload("res://scenes/ui/Encyclopedia.tscn")
 const ShopScene := preload("res://scenes/ui/Shop.tscn")
 const SettingsScene := preload("res://scenes/ui/Settings.tscn")
+const InfoCardScene := preload("res://scenes/ui/InfoCard.tscn")
 
 @onready var essence_label: Label = $TopBar/Margin/HBox/EssenceBox/EssenceLabel
 @onready var essence_icon: Panel = $TopBar/Margin/HBox/EssenceBox/EssenceIcon
@@ -85,7 +86,16 @@ func _on_buy_pressed() -> void:
 		return
 	if not EconomyManager.spend_essence(BUY_COST):
 		return
-	SpawnManager._try_spawn()
+	var perfume_data: Dictionary = SpawnManager._try_spawn()
+	if not perfume_data.is_empty():
+		var url: String = String(perfume_data.get("url", perfume_data.get("name", "")))
+		var unlocked: Array = SaveManager.data.get("unlocked_perfumes", [])
+		if url != "" and not unlocked.has(url):
+			unlocked.append(url)
+			SaveManager.data["unlocked_perfumes"] = unlocked
+			var card := InfoCardScene.instantiate()
+			get_tree().root.add_child(card)
+			card.show_perfume(perfume_data, 1)
 	SaveManager.save_game()
 
 

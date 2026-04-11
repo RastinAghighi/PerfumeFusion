@@ -61,20 +61,21 @@ func _active_interval() -> float:
 	return get_current_spawn_interval()
 
 
-func _try_spawn() -> void:
+func _try_spawn() -> Dictionary:
 	if grid_reference == null or not grid_reference.has_method("get_empty_slots"):
-		return
+		return {}
 	var empty_slots: Array = grid_reference.get_empty_slots()
 	if empty_slots.is_empty():
-		return
+		return {}
 	var slot = empty_slots[randi() % empty_slots.size()]
 	var data: Dictionary = DataManager.get_random_perfume(1)
 	if data.is_empty():
-		return
+		return {}
 	var item := PerfumeItemScene.instantiate()
 	slot.place_item(item)
 	item.setup(1, data)
 	_fade_in(item)
+	return data
 
 
 func _fade_in(item: Node) -> void:

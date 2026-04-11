@@ -31,6 +31,22 @@ func _ready() -> void:
 	_load_perfumes()
 	_bucket_perfumes()
 	_print_summary()
+	export_filtered_data()
+
+
+func export_filtered_data() -> void:
+	var filtered: Array = []
+	for i in range(1, TIER_COUNT + 1):
+		var bracket: Array = tier_brackets[i]
+		for perfume in bracket:
+			filtered.append(perfume)
+	var out := FileAccess.open("res://data/perfumes_filtered.json", FileAccess.WRITE)
+	if out == null:
+		push_error("DataManager: failed to open perfumes_filtered.json for writing")
+		return
+	out.store_string(JSON.stringify(filtered))
+	out.close()
+	print("Exported %d perfumes to perfumes_filtered.json" % filtered.size())
 
 
 func _load_perfumes() -> void:
