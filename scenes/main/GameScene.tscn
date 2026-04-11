@@ -1,0 +1,131 @@
+[gd_scene load_steps=4 format=3 uid="uid://b1gamescene0001"]
+
+[ext_resource type="Script" path="res://scripts/grid/Grid.gd" id="1_grid"]
+[ext_resource type="PackedScene" uid="uid://b1gridslot00001" path="res://scenes/grid/GridSlot.tscn" id="2_slot"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
+bg_color = Color(0.08, 0.06, 0.12, 1)
+
+[node name="GameScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bg")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="TopHUD" type="Control" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[node name="Grid" type="GridContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 5
+script = ExtResource("1_grid")
+
+[node name="GridSlot0" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="GridSlot1" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="GridSlot2" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="GridSlot3" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="GridSlot4" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="GridSlot5" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="GridSlot6" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="GridSlot7" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="GridSlot8" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="GridSlot9" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="GridSlot10" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="GridSlot11" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="GridSlot12" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="GridSlot13" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="GridSlot14" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="GridSlot15" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="GridSlot16" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="GridSlot17" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="GridSlot18" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="GridSlot19" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="GridSlot20" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="GridSlot21" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="GridSlot22" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="GridSlot23" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="GridSlot24" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="BottomBar" type="Control" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2

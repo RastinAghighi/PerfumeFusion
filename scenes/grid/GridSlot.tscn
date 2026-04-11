@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://b1gridslot00001"]
+
+[ext_resource type="Script" path="res://scripts/grid/GridSlot.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slot"]
+bg_color = Color(0.15, 0.15, 0.2, 0.8)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[node name="GridSlot" type="Panel"]
+custom_minimum_size = Vector2(190, 190)
+offset_right = 190.0
+offset_bottom = 190.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
+script = ExtResource("1_script")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
