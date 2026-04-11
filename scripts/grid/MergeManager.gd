@@ -1,7 +1,7 @@
 extends Node
 
 signal merge_completed(new_item, tier)
-signal new_perfume_discovered(perfume_data)
+signal new_perfume_discovered(perfume_data, tier)
 
 const MAX_TIER := 20
 const PerfumeItemScene := preload("res://scenes/grid/PerfumeItem.tscn")
@@ -98,7 +98,7 @@ func _animate_merge(item_a, item_b, target_slot, new_tier: int, new_data: Dictio
 		var stats: Dictionary = SaveManager.data.get("stats", {})
 		stats["total_perfumes_discovered"] = int(stats.get("total_perfumes_discovered", 0)) + 1
 		SaveManager.data["stats"] = stats
-		emit_signal("new_perfume_discovered", new_data)
+		emit_signal("new_perfume_discovered", new_data, new_tier)
 
 	var stats2: Dictionary = SaveManager.data.get("stats", {})
 	stats2["total_merges"] = int(stats2.get("total_merges", 0)) + 1

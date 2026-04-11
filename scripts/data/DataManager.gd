@@ -72,6 +72,9 @@ func _bucket_perfumes() -> void:
 		if end > n:
 			end = n
 		var slice: Array = valid.slice(start, end)
+		slice.sort_custom(func(a, b): return int(a.get("votes", 0)) > int(b.get("votes", 0)))
+		if slice.size() > 10:
+			slice = slice.slice(0, 10)
 		tier_brackets[i] = slice
 		if i < TIER_COUNT and end < n:
 			tier_rating_bounds.append(float(valid[end]["rating"]))
@@ -144,6 +147,18 @@ func get_tier_color(tier: int) -> Color:
 		return ACCORD_COLORS[best_key]
 	for token in ACCORD_COLORS.keys():
 		if best_key.find(token) != -1:
+			return ACCORD_COLORS[token]
+	return DEFAULT_COLOR
+
+
+func get_accord_color(accord: String) -> Color:
+	var key := accord.to_lower().strip_edges()
+	if key.is_empty():
+		return DEFAULT_COLOR
+	if ACCORD_COLORS.has(key):
+		return ACCORD_COLORS[key]
+	for token in ACCORD_COLORS.keys():
+		if key.find(token) != -1:
 			return ACCORD_COLORS[token]
 	return DEFAULT_COLOR
 
