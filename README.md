@@ -45,6 +45,31 @@ that sets `Cross-Origin-Opener-Policy: same-origin` and
 
 Browser save data (`user://`) maps to IndexedDB, scoped per origin.
 
+### Web distribution platforms
+
+The game ships with two HTML shell templates under `export/web/`:
+
+- `custom_shell.html` — loads the Poki SDK (`poki-sdk.js`).
+- `crazygames_shell.html` — loads the CrazyGames SDK v3
+  (`crazygames-sdk-v3.js`).
+
+`AdManager` detects which SDK is present on `window` at runtime
+(`detect_platform()` → `"poki"` / `"crazygames"` / `"none"`) and routes
+rewarded / commercial-break ads to the matching SDK. Set
+`AdManager.is_test_mode = false` before exporting for production.
+
+**Poki** — submit at <https://developers.poki.com/>. Select
+`export/web/custom_shell.html` as the Custom HTML Shell in the Web export
+preset before exporting.
+
+**CrazyGames** — submit at <https://developer.crazygames.com/>:
+
+1. Set `export/web/crazygames_shell.html` as the Custom HTML Shell and
+   export to a clean folder.
+2. Zip the export folder (HTML, `.wasm`, `.pck`, and any sidecar files).
+3. Upload the zip in the CrazyGames developer portal.
+4. Reviews typically take 1–2 weeks before the game goes live.
+
 ## Scraper
 
 Python scraper that pulls perfume data from Fragrantica.com and writes it to
