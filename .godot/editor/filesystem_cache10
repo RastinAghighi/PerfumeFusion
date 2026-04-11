@@ -1,0 +1,37 @@
+63f7b34db8d8cdea90c76aacccf841ec
+::res://::1775875612
+README.md::TextFile::-1::1775868787::0::1::::<><><>0<>0<><>::
+requirements.txt::TextFile::-1::1775868566::0::1::::<><><>0<>0<><>::
+::res://assets/::1775874855
+::res://assets/art/::1775874899
+::res://assets/audio/::1775874899
+::res://assets/fonts/::1775874900
+::res://data/::1775874562
+failed_urls.txt::TextFile::-1::1775874555::0::1::::<><><>0<>0<><>::
+perfumes.json::JSON::-1::1775874562::0::1::::<><><>0<>0<><>::
+::res://data/archive/::1775875538
+fra_cleaned.csv::Translation::8908723210810691896::1775873191::1775875523::1::::<><><>0<>0<>5e7d30861ae6f0a140ec80ff8c9eefab<>::
+fra_perfumes.csv::Translation::1725699202758571478::1775873191::1775875538::1::::<><><>0<>0<>4b90cec5fd563a51091e3a1e734bf97d<>res://data/archive/fra_perfumes.Gender.translation<*>res://data/archive/fra_perfumes.Rating Value.translation<*>res://data/archive/fra_perfumes.Rating Count.translation<*>res://data/archive/fra_perfumes.Main Accords.translation<*>res://data/archive/fra_perfumes.Perfumers.translation<*>res://data/archive/fra_perfumes.Description.translation<*>res://data/archive/fra_perfumes.url.translation::
+fra_perfumes.Description.translation::OptimizedTranslation::5978191159120756362::1775875536::0::1::::<><><>0<>0<><>::
+fra_perfumes.Gender.translation::OptimizedTranslation::8010293498140099190::1775875529::0::1::::<><><>0<>0<><>::
+fra_perfumes.Main Accords.translation::OptimizedTranslation::1029004577011554105::1775875532::0::1::::<><><>0<>0<><>::
+fra_perfumes.Perfumers.translation::OptimizedTranslation::509190505027698039::1775875533::0::1::::<><><>0<>0<><>::
+fra_perfumes.Rating Count.translation::OptimizedTranslation::2480272010581747920::1775875531::0::1::::<><><>0<>0<><>::
+fra_perfumes.Rating Value.translation::OptimizedTranslation::987191176691858477::1775875530::0::1::::<><><>0<>0<><>::
+fra_perfumes.url.translation::OptimizedTranslation::845679091562277650::1775875537::0::1::::<><><>0<>0<><>::
+::res://documents/::1775874812
+PERFUMEFUSION_BUILD_GUIDE.md::TextFile::-1::1775874804::0::1::::<><><>0<>0<><>::
+SCRAPER_PROMPT.md::TextFile::-1::1775867982::0::1::::<><><>0<>0<><>::
+::res://scenes/::1775874855
+::res://scenes/effects/::1775874889
+::res://scenes/grid/::1775874883
+::res://scenes/main/::1775874880
+::res://scenes/ui/::1775874884
+::res://scraper/::1775868995
+::res://scraper/__pycache__/::1775868995
+::res://scripts/::1775874855
+::res://scripts/data/::1775875523
+DataManager.gd::GDScript::6297501310383357416::1775875260::0::1::::<>Node<><>0<>0<><>::
+::res://scripts/grid/::1775874895
+::res://scripts/managers/::1775874899
+::res://scripts/ui/::1775874897

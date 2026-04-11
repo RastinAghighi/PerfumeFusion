@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://yt7ap5dosvja"
+
+[deps]
+
+files=["res://data/archive/fra_perfumes.Gender.translation", "res://data/archive/fra_perfumes.Rating Value.translation", "res://data/archive/fra_perfumes.Rating Count.translation", "res://data/archive/fra_perfumes.Main Accords.translation", "res://data/archive/fra_perfumes.Perfumers.translation", "res://data/archive/fra_perfumes.Description.translation", "res://data/archive/fra_perfumes.url.translation"]
+
+source_file="res://data/archive/fra_perfumes.csv"
+dest_files=["res://data/archive/fra_perfumes.Gender.translation", "res://data/archive/fra_perfumes.Rating Value.translation", "res://data/archive/fra_perfumes.Rating Count.translation", "res://data/archive/fra_perfumes.Main Accords.translation", "res://data/archive/fra_perfumes.Perfumers.translation", "res://data/archive/fra_perfumes.Description.translation", "res://data/archive/fra_perfumes.url.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true
