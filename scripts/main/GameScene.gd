@@ -14,6 +14,9 @@ func _ready() -> void:
 	add_child(HUDScene.instantiate())
 	AudioManager.register_bgm_player($BGM)
 
+	if OS.has_feature("web"):
+		AdManager.init_poki()
+
 	if not MergeManager.new_perfume_discovered.is_connected(_on_new_perfume_discovered):
 		MergeManager.new_perfume_discovered.connect(_on_new_perfume_discovered)
 
