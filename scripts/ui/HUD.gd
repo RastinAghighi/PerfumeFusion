@@ -1,6 +1,7 @@
 extends CanvasLayer
 
 const BUY_COST: int = 10
+const EncyclopediaScene := preload("res://scenes/ui/Encyclopedia.tscn")
 
 @onready var essence_label: Label = $TopBar/Margin/HBox/EssenceBox/EssenceLabel
 @onready var essence_icon: Panel = $TopBar/Margin/HBox/EssenceBox/EssenceIcon
@@ -57,7 +58,8 @@ func _show_grid_full() -> void:
 
 
 func _on_collection_pressed() -> void:
-	print("open encyclopedia")
+	var enc := EncyclopediaScene.instantiate()
+	get_tree().root.add_child(enc)
 
 
 func _on_shop_pressed() -> void:

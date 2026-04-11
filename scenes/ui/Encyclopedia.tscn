@@ -1,0 +1,151 @@
+[gd_scene load_steps=3 format=3 uid="uid://b4encyc001a"]
+
+[ext_resource type="Script" path="res://scripts/ui/Encyclopedia.gd" id="1_enc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
+bg_color = Color(0.08, 0.06, 0.12, 0.95)
+
+[node name="Encyclopedia" type="CanvasLayer"]
+layer = 30
+script = ExtResource("1_enc")
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.08, 0.06, 0.12, 0.95)
+
+[node name="Margin" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="VBox" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="TopBar" type="HBoxContainer" parent="Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="BackButton" type="Button" parent="Margin/VBox/TopBar"]
+custom_minimum_size = Vector2(120, 48)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "← Back"
+
+[node name="TitleLabel" type="Label" parent="Margin/VBox/TopBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 0.95, 0.85, 1)
+theme_override_font_sizes/font_size = 28
+text = "Fragrance Encyclopedia"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CountLabel" type="Label" parent="Margin/VBox/TopBar"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.78, 0.95, 1)
+theme_override_font_sizes/font_size = 18
+text = "0 / 0"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="TierFilter" type="HBoxContainer" parent="Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TierAll" type="Button" parent="Margin/VBox/TierFilter"]
+layout_mode = 2
+toggle_mode = true
+button_pressed = true
+text = "All"
+
+[node name="Tier1" type="Button" parent="Margin/VBox/TierFilter"]
+layout_mode = 2
+toggle_mode = true
+text = "T1-5"
+
+[node name="Tier2" type="Button" parent="Margin/VBox/TierFilter"]
+layout_mode = 2
+toggle_mode = true
+text = "T6-10"
+
+[node name="Tier3" type="Button" parent="Margin/VBox/TierFilter"]
+layout_mode = 2
+toggle_mode = true
+text = "T11-15"
+
+[node name="Tier4" type="Button" parent="Margin/VBox/TierFilter"]
+layout_mode = 2
+toggle_mode = true
+text = "T16-20"
+
+[node name="GenderFilter" type="HBoxContainer" parent="Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="GenderAll" type="Button" parent="Margin/VBox/GenderFilter"]
+layout_mode = 2
+toggle_mode = true
+button_pressed = true
+text = "All"
+
+[node name="GenderMen" type="Button" parent="Margin/VBox/GenderFilter"]
+layout_mode = 2
+toggle_mode = true
+text = "Men"
+
+[node name="GenderWomen" type="Button" parent="Margin/VBox/GenderFilter"]
+layout_mode = 2
+toggle_mode = true
+text = "Women"
+
+[node name="GenderUnisex" type="Button" parent="Margin/VBox/GenderFilter"]
+layout_mode = 2
+toggle_mode = true
+text = "Unisex"
+
+[node name="Scroll" type="ScrollContainer" parent="Margin/VBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ScrollVBox" type="VBoxContainer" parent="Margin/VBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+
+[node name="Grid" type="GridContainer" parent="Margin/VBox/Scroll/ScrollVBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 12
+
+[node name="LoadMoreButton" type="Button" parent="Margin/VBox/Scroll/ScrollVBox"]
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 18
+text = "Load More"
+
+[node name="EmptyLabel" type="Label" parent="Margin/VBox/Scroll/ScrollVBox"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.7, 0.65, 0.8, 1)
+theme_override_font_sizes/font_size = 18
+text = "No perfumes match these filters."
+horizontal_alignment = 1
+visible = false
