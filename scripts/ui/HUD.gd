@@ -1,6 +1,9 @@
 extends CanvasLayer
 
 const BUY_COST: int = 10
+const FRENZY_COOLDOWN: float = 300.0
+const FRENZY_DURATION: float = 30.0
+
 const EncyclopediaScene := preload("res://scenes/ui/Encyclopedia.tscn")
 const ShopScene := preload("res://scenes/ui/Shop.tscn")
 
@@ -11,16 +14,49 @@ const ShopScene := preload("res://scenes/ui/Shop.tscn")
 @onready var shop_button: Button = $BottomBar/Margin/HBox/ShopButton
 @onready var buy_button: Button = $BottomBar/Margin/HBox/BuyButton
 @onready var grid_full_label: Label = $GridFullLabel
+@onready var rare_drop_button: Button = $RareDropAnchor/RareDropButton
+@onready var frenzy_button: Button = $FrenzyAnchor/FrenzyButton
+@onready var frenzy_border: Panel = $FrenzyBorder
+@onready var frenzy_countdown: Label = $FrenzyCountdown
+
+var _rare_pulse_tween: Tween = null
+var _frenzy_cooldown_left: float = 0.0
+var _frenzy_time_left: float = 0.0
+var _frenzy_active: bool = false
+var _frenzy_awaiting_ad: bool = false
+var _border_tween: Tween = null
 
 
 func _ready() -> void:
+	add_to_group("hud")
 	EconomyManager.essence_changed.connect(_on_essence_changed)
 	collection_button.pressed.connect(_on_collection_pressed)
 	shop_button.pressed.connect(_on_shop_pressed)
 	buy_button.pressed.connect(_on_buy_pressed)
 	settings_button.pressed.connect(_on_settings_pressed)
+	rare_drop_button.pressed.connect(_on_rare_drop_pressed)
+	frenzy_button.pressed.connect(_on_frenzy_pressed)
+	RareDropManager.rare_drop_available.connect(_on_rare_drop_available)
+	RareDropManager.rare_drop_expired.connect(_on_rare_drop_expired)
 	grid_full_label.modulate.a = 0.0
+	rare_drop_button.visible = false
+	frenzy_border.visible = false
+	frenzy_countdown.visible = false
 	_update_essence_label(EconomyManager.get_essence(), false)
+	_update_frenzy_button_text()
+
+
+func _process(delta: float) -> void:
+	if _frenzy_cooldown_left > 0.0 and not _frenzy_active:
+		_frenzy_cooldown_left = max(0.0, _frenzy_cooldown_left - delta)
+		_update_frenzy_button_text()
+
+	if _frenzy_active:
+		_frenzy_time_left -= delta
+		if _frenzy_time_left <= 0.0:
+			_end_frenzy()
+		else:
+			frenzy_countdown.text = "FRENZY: %ds" % int(ceil(_frenzy_time_left))
 
 
 func _on_essence_changed(new_amount: int) -> void:
@@ -42,7 +78,7 @@ func _on_buy_pressed() -> void:
 	if SpawnManager.grid_reference == null:
 		return
 	if SpawnManager.grid_reference.is_full():
-		_show_grid_full()
+		show_grid_full_message("Grid is full!")
 		return
 	if not EconomyManager.spend_essence(BUY_COST):
 		return
@@ -50,8 +86,8 @@ func _on_buy_pressed() -> void:
 	SaveManager.save_game()
 
 
-func _show_grid_full() -> void:
-	grid_full_label.text = "Grid is full!"
+func show_grid_full_message(text: String = "Grid is full!") -> void:
+	grid_full_label.text = text
 	grid_full_label.modulate.a = 1.0
 	var tween := grid_full_label.create_tween()
 	tween.tween_interval(1.0)
@@ -70,3 +106,93 @@ func _on_shop_pressed() -> void:
 
 func _on_settings_pressed() -> void:
 	print("open settings")
+
+
+func _on_rare_drop_available() -> void:
+	rare_drop_button.visible = true
+	rare_drop_button.pivot_offset = rare_drop_button.size * 0.5
+	rare_drop_button.scale = Vector2.ONE
+	rare_drop_button.modulate = Color(1, 1, 1, 1)
+	if _rare_pulse_tween != null and _rare_pulse_tween.is_valid():
+		_rare_pulse_tween.kill()
+	_rare_pulse_tween = create_tween().set_loops()
+	_rare_pulse_tween.tween_property(rare_drop_button, "scale", Vector2(1.12, 1.12), 0.45)
+	_rare_pulse_tween.tween_property(rare_drop_button, "scale", Vector2(1.0, 1.0), 0.45)
+
+
+func _on_rare_drop_expired() -> void:
+	rare_drop_button.visible = false
+	if _rare_pulse_tween != null and _rare_pulse_tween.is_valid():
+		_rare_pulse_tween.kill()
+		_rare_pulse_tween = null
+	rare_drop_button.scale = Vector2.ONE
+
+
+func _on_rare_drop_pressed() -> void:
+	_on_rare_drop_expired()
+	RareDropManager.claim()
+
+
+func _on_frenzy_pressed() -> void:
+	if _frenzy_active or _frenzy_awaiting_ad or _frenzy_cooldown_left > 0.0:
+		return
+	_frenzy_awaiting_ad = true
+	frenzy_button.disabled = true
+	AdManager.show_rewarded_ad(func(success: bool) -> void:
+		_frenzy_awaiting_ad = false
+		if success:
+			_start_frenzy()
+		else:
+			frenzy_button.disabled = false
+			_update_frenzy_button_text()
+	)
+
+
+func _start_frenzy() -> void:
+	_frenzy_active = true
+	_frenzy_time_left = FRENZY_DURATION
+	_frenzy_cooldown_left = FRENZY_COOLDOWN
+	SpawnManager.start_frenzy(FRENZY_DURATION)
+	frenzy_countdown.visible = true
+	frenzy_countdown.text = "FRENZY: %ds" % int(FRENZY_DURATION)
+	frenzy_border.visible = true
+	frenzy_border.modulate = Color(1, 1, 1, 1)
+	if _border_tween != null and _border_tween.is_valid():
+		_border_tween.kill()
+	_border_tween = create_tween().set_loops()
+	_border_tween.tween_property(frenzy_border, "modulate:a", 0.35, 0.5)
+	_border_tween.tween_property(frenzy_border, "modulate:a", 1.0, 0.5)
+	frenzy_button.disabled = true
+	_update_frenzy_button_text()
+
+
+func _end_frenzy() -> void:
+	_frenzy_active = false
+	_frenzy_time_left = 0.0
+	frenzy_countdown.visible = false
+	frenzy_border.visible = false
+	if _border_tween != null and _border_tween.is_valid():
+		_border_tween.kill()
+		_border_tween = null
+	_update_frenzy_button_text()
+
+
+func _update_frenzy_button_text() -> void:
+	if _frenzy_active:
+		frenzy_button.text = "⚡ Active"
+		frenzy_button.disabled = true
+		return
+	if _frenzy_cooldown_left > 0.0:
+		frenzy_button.text = "⚡ %s" % _format_cooldown(_frenzy_cooldown_left)
+		frenzy_button.disabled = true
+		return
+	frenzy_button.text = "⚡ Frenzy"
+	if not _frenzy_awaiting_ad:
+		frenzy_button.disabled = false
+
+
+func _format_cooldown(seconds: float) -> String:
+	var total: int = int(ceil(seconds))
+	var m: int = total / 60
+	var s: int = total % 60
+	return "%d:%02d" % [m, s]

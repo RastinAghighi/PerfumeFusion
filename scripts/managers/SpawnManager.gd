@@ -128,3 +128,24 @@ func start_frenzy(duration: float) -> void:
 	_frenzy_active = true
 	_frenzy_time_left = duration
 	spawn_timer = min(spawn_timer, FRENZY_INTERVAL)
+
+
+func is_frenzy_active() -> bool:
+	return _frenzy_active
+
+
+func spawn_at_tier(tier: int) -> bool:
+	if grid_reference == null or not grid_reference.has_method("get_empty_slots"):
+		return false
+	var empty_slots: Array = grid_reference.get_empty_slots()
+	if empty_slots.is_empty():
+		return false
+	var slot = empty_slots[randi() % empty_slots.size()]
+	var data: Dictionary = DataManager.get_random_perfume(tier)
+	if data.is_empty():
+		return false
+	var item := PerfumeItemScene.instantiate()
+	slot.place_item(item)
+	item.setup(tier, data)
+	_fade_in(item)
+	return true

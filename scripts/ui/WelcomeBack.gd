@@ -5,6 +5,7 @@ extends CanvasLayer
 @onready var double_button: Button = $Panel/VBox/Buttons/DoubleButton
 
 var _amount: int = 0
+var _awaiting_ad: bool = false
 
 
 func setup(amount: int) -> void:
@@ -25,5 +26,17 @@ func _on_collect_pressed() -> void:
 
 
 func _on_double_pressed() -> void:
-	EconomyManager.collect_offline_earnings(true)
-	queue_free()
+	if _awaiting_ad:
+		return
+	_awaiting_ad = true
+	double_button.disabled = true
+	AdManager.show_rewarded_ad(func(success: bool) -> void:
+		_awaiting_ad = false
+		if not is_inside_tree():
+			return
+		if success:
+			EconomyManager.collect_offline_earnings(true)
+			queue_free()
+		else:
+			double_button.disabled = false
+	)
