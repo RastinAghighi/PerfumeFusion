@@ -147,6 +147,7 @@ func _animate_merge(item_a, item_b, target_slot, new_tier: int, new_data: Dictio
 		var stats: Dictionary = SaveManager.data.get("stats", {})
 		stats["total_perfumes_discovered"] = int(stats.get("total_perfumes_discovered", 0)) + 1
 		SaveManager.data["stats"] = stats
+		AudioManager.play_unlock()
 		emit_signal("new_perfume_discovered", new_data, new_tier)
 
 	var stats2: Dictionary = SaveManager.data.get("stats", {})
@@ -156,6 +157,8 @@ func _animate_merge(item_a, item_b, target_slot, new_tier: int, new_data: Dictio
 	SaveManager.data["stats"] = stats2
 
 	EconomyManager.add_essence(EconomyManager.get_merge_reward(new_tier))
+
+	AudioManager.play_merge()
 
 	SaveManager.save_game()
 	emit_signal("merge_completed", new_item, new_tier)

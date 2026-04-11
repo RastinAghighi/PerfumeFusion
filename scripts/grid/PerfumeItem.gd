@@ -123,6 +123,7 @@ func _start_drag() -> void:
 	global_position = saved_global_pos
 
 	is_dragging = true
+	AudioManager.play_pickup()
 
 
 func _end_press() -> void:
@@ -134,6 +135,8 @@ func _end_press() -> void:
 		# Simple click — item is still in its slot, nothing to do.
 		original_slot = null
 		return
+
+	AudioManager.play_drop()
 
 	z_index = 0
 	top_level = false

@@ -27,6 +27,7 @@ SpawnManager="*res://scripts/managers/SpawnManager.gd"
 EconomyManager="*res://scripts/managers/EconomyManager.gd"
 AdManager="*res://scripts/managers/AdManager.gd"
 RareDropManager="*res://scripts/managers/RareDropManager.gd"
+AudioManager="*res://scripts/managers/AudioManager.gd"
 
 [display]
 

@@ -128,6 +128,7 @@ func start_frenzy(duration: float) -> void:
 	_frenzy_active = true
 	_frenzy_time_left = duration
 	spawn_timer = min(spawn_timer, FRENZY_INTERVAL)
+	AudioManager.play_frenzy()
 
 
 func is_frenzy_active() -> bool:

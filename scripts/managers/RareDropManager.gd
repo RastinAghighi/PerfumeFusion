@@ -37,6 +37,7 @@ func _schedule_next() -> void:
 func _show_drop() -> void:
 	_is_visible = true
 	_visible_time_left = VISIBLE_DURATION
+	AudioManager.play_rare_drop()
 	emit_signal("rare_drop_available")
 
 

@@ -40,6 +40,8 @@ func collect_offline_earnings(double: bool) -> void:
 func add_essence(amount: int) -> void:
 	essence += amount
 	SaveManager.data["essence"] = essence
+	if amount > 0:
+		AudioManager.play_essence()
 	emit_signal("essence_changed", essence)
 
 

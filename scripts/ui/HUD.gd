@@ -36,6 +36,8 @@ func _ready() -> void:
 	settings_button.pressed.connect(_on_settings_pressed)
 	rare_drop_button.pressed.connect(_on_rare_drop_pressed)
 	frenzy_button.pressed.connect(_on_frenzy_pressed)
+	for btn in [collection_button, shop_button, buy_button, settings_button, rare_drop_button, frenzy_button]:
+		btn.pressed.connect(AudioManager.play_button)
 	RareDropManager.rare_drop_available.connect(_on_rare_drop_available)
 	RareDropManager.rare_drop_expired.connect(_on_rare_drop_expired)
 	grid_full_label.modulate.a = 0.0
