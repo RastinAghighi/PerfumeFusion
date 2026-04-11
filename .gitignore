@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+venv/
+.venv/
+env/
+
+# Scraper output (uncomment if files get too large to commit)
+# data/*.json
+data/failed_urls.txt
+
+# Editor
+.vscode/
+.idea/
+*.swp
