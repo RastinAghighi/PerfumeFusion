@@ -1,5 +1,5 @@
 63f7b34db8d8cdea90c76aacccf841ec
-::res://::1775877994
+::res://::1775880309
 README.md::TextFile::-1::1775868787::0::1::::<><><>0<>0<><>::
 requirements.txt::TextFile::-1::1775868566::0::1::::<><><>0<>0<><>::
 ::res://assets/::1775874855
@@ -23,7 +23,8 @@ fra_perfumes.url.translation::OptimizedTranslation::845679091562277650::17758755
 PERFUMEFUSION_BUILD_GUIDE.md::TextFile::-1::1775874804::0::1::::<><><>0<>0<><>::
 SCRAPER_PROMPT.md::TextFile::-1::1775867982::0::1::::<><><>0<>0<><>::
 ::res://scenes/::1775874855
-::res://scenes/effects/::1775874889
+::res://scenes/effects/::1775880147
+MergeParticles.tscn::PackedScene::9171002371884179909::1775880147::0::1::::<><><>0<>0<><>::
 ::res://scenes/grid/::1775877249
 GridSlot.tscn::PackedScene::4662851599337781640::1775876649::0::1::::<><><>0<>0<><>::res://scripts/grid/GridSlot.gd
 PerfumeItem.tscn::PackedScene::2030590069535607632::1775877249::0::1::::<><><>0<>0<><>::res://scripts/grid/PerfumeItem.gd
@@ -35,10 +36,10 @@ GameScene.tscn::PackedScene::3477958997041365624::1775876649::0::1::::<><><>0<>0
 ::res://scripts/::1775874855
 ::res://scripts/data/::1775875523
 DataManager.gd::GDScript::6297501310383357416::1775875260::0::1::::<>Node<><>0<>0<><>::
-::res://scripts/grid/::1775877805
+::res://scripts/grid/::1775880196
 Grid.gd::GDScript::3763715202287655155::1775877785::0::1::::<>GridContainer<><>0<>0<><>::
 GridSlot.gd::GDScript::5884806889703482909::1775876196::0::1::::<>Panel<><>0<>0<><>::
-MergeManager.gd::GDScript::5681949451772481557::1775877730::0::1::::<>Node<><>0<>0<><>::
+MergeManager.gd::GDScript::5681949451772481557::1775880196::0::1::::<>Node<><>0<>0<><>::
 PerfumeItem.gd::GDScript::4453393825467522593::1775877214::0::1::::<>Control<><>0<>0<><>::
 ::res://scripts/managers/::1775876649
 SaveManager.gd::GDScript::2186709267014223348::1775875840::0::1::::<>Node<><>0<>0<><>::
