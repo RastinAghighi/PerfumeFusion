@@ -3,7 +3,11 @@ extends Control
 var tier: int = 0
 var perfume_data: Dictionary = {}
 
+const DRAG_THRESHOLD: float = 10.0
+
+var is_pressed: bool = false
 var is_dragging: bool = false
+var press_global_pos: Vector2 = Vector2.ZERO
 var original_slot: Node = null
 
 
@@ -36,23 +40,33 @@ func setup(p_tier: int, p_data: Dictionary) -> void:
 
 
 func _gui_input(event: InputEvent) -> void:
-	if is_dragging:
+	if is_dragging or is_pressed:
 		return
-	var should_start := false
+	var should_press := false
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			should_start = true
+			should_press = true
 	elif event is InputEventScreenTouch:
 		if event.pressed:
-			should_start = true
-	if should_start:
-		_start_drag()
+			should_press = true
+	if should_press:
+		_begin_press()
 		accept_event()
 
 
 func _input(event: InputEvent) -> void:
-	if not is_dragging:
+	if not is_pressed:
 		return
+
+	if not is_dragging:
+		var moved: bool = false
+		if event is InputEventMouseMotion or event is InputEventScreenDrag:
+			var pointer := get_global_mouse_position()
+			if pointer.distance_to(press_global_pos) > DRAG_THRESHOLD:
+				moved = true
+		if moved:
+			_start_drag()
+
 	var should_stop := false
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
@@ -61,7 +75,7 @@ func _input(event: InputEvent) -> void:
 		if not event.pressed:
 			should_stop = true
 	if should_stop:
-		_stop_drag()
+		_end_press()
 
 
 func _process(_delta: float) -> void:
@@ -70,7 +84,7 @@ func _process(_delta: float) -> void:
 		global_position = pointer - size * 0.5
 
 
-func _start_drag() -> void:
+func _begin_press() -> void:
 	var node: Node = get_parent()
 	var found_slot: Node = null
 	while node != null:
@@ -81,6 +95,13 @@ func _start_drag() -> void:
 	if found_slot == null:
 		return
 	original_slot = found_slot
+	press_global_pos = get_global_mouse_position()
+	is_pressed = true
+
+
+func _start_drag() -> void:
+	if original_slot == null:
+		return
 
 	var saved_global_pos: Vector2 = global_position
 	var saved_size: Vector2 = size
@@ -98,8 +119,16 @@ func _start_drag() -> void:
 	is_dragging = true
 
 
-func _stop_drag() -> void:
+func _end_press() -> void:
+	var was_dragging: bool = is_dragging
+	is_pressed = false
 	is_dragging = false
+
+	if not was_dragging:
+		# Simple click — item is still in its slot, nothing to do.
+		original_slot = null
+		return
+
 	z_index = 0
 	top_level = false
 
@@ -107,7 +136,25 @@ func _stop_drag() -> void:
 	var grid: Node = null
 	if original_slot != null:
 		grid = original_slot.get_parent()
-	if grid == null or not grid.has_method("attempt_drop"):
+
+	if grid != null and grid.has_method("attempt_drop"):
+		var target = grid.get_slot_at_position(pointer)
+		grid.attempt_drop(self, target)
+	else:
+		_force_return_to_origin()
+
+	# Safety: if we still have no parent or are stranded outside the grid, force back.
+	if is_inside_tree() == false or get_parent() == null or get_parent() == get_tree().root:
+		_force_return_to_origin()
+
+
+func _force_return_to_origin() -> void:
+	if original_slot == null:
+		queue_free()
 		return
-	var target = grid.get_slot_at_position(pointer)
-	grid.attempt_drop(self, target)
+	if get_parent() != null:
+		get_parent().remove_child(self)
+	top_level = false
+	z_index = 0
+	original_slot.place_item(self)
+	original_slot = null

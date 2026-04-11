@@ -28,6 +28,6 @@ SpawnManager="*res://scripts/managers/SpawnManager.gd"
 [display]
 
 window/size/viewport_width=1080
-window/size/viewport_height=1920
+window/size/viewport_height=800
 window/stretch/mode="canvas_items"
 window/stretch/aspect="keep_width"
