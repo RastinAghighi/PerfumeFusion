@@ -25,6 +25,7 @@ SaveManager="*res://scripts/managers/SaveManager.gd"
 MergeManager="*res://scripts/grid/MergeManager.gd"
 SpawnManager="*res://scripts/managers/SpawnManager.gd"
 EconomyManager="*res://scripts/managers/EconomyManager.gd"
+AdManager="*res://scripts/managers/AdManager.gd"
 
 [display]
 
