@@ -18,6 +18,9 @@ var _cb_refs: Array = []
 func detect_platform() -> String:
 	if _platform != "":
 		return _platform
+	if OS.has_feature("android"):
+		_platform = "admob"
+		return _platform
 	if not OS.has_feature("web"):
 		_platform = "none"
 		return _platform
@@ -37,9 +40,13 @@ func detect_platform() -> String:
 func init_web_sdk() -> void:
 	if is_test_mode or _initialized:
 		return
+	var platform := detect_platform()
+	if platform == "admob":
+		_init_admob()
+		_initialized = true
+		return
 	if not OS.has_feature("web"):
 		return
-	var platform := detect_platform()
 	var js_window: Variant = JavaScriptBridge.get_interface("window")
 	if js_window == null:
 		return
@@ -69,6 +76,11 @@ func show_rewarded_ad(callback: Callable) -> void:
 			callback.call(true)
 		return
 
+	var platform := detect_platform()
+	if platform == "admob":
+		_pending_rewarded_callback = callback
+		_admob_rewarded()
+		return
 	if not OS.has_feature("web"):
 		_finish_rewarded(false, callback)
 		return
@@ -78,7 +90,7 @@ func show_rewarded_ad(callback: Callable) -> void:
 		return
 
 	_pending_rewarded_callback = callback
-	match detect_platform():
+	match platform:
 		"poki":
 			_poki_rewarded(js_window)
 		"crazygames":
@@ -89,15 +101,22 @@ func show_rewarded_ad(callback: Callable) -> void:
 
 
 func show_commercial_break() -> void:
-	if is_test_mode or not OS.has_feature("web"):
+	if is_test_mode:
 		return
 	var now_ms: int = Time.get_ticks_msec()
 	if now_ms - _last_commercial_break_ms < int(COMMERCIAL_BREAK_COOLDOWN_SEC * 1000.0):
 		return
+	var platform := detect_platform()
+	if platform == "admob":
+		_last_commercial_break_ms = now_ms
+		_admob_interstitial()
+		return
+	if not OS.has_feature("web"):
+		return
 	var js_window: Variant = JavaScriptBridge.get_interface("window")
 	if js_window == null:
 		return
-	match detect_platform():
+	match platform:
 		"poki":
 			if js_window.PokiSDK:
 				_last_commercial_break_ms = now_ms
@@ -204,3 +223,30 @@ func _finish_rewarded(success: bool, callback: Callable) -> void:
 	emit_signal("ad_completed", success)
 	if callback.is_valid():
 		callback.call(success)
+
+
+# --- AdMob (Android) skeleton ---
+# These stubs exist so platform routing compiles today. Wire them to
+# godot-admob-plugin singletons (MobileAds / RewardedAd / InterstitialAd)
+# when the plugin is installed. See documents/ANDROID_EXPORT.md.
+
+func _init_admob() -> void:
+	push_warning("AdManager: AdMob init not yet implemented (see ANDROID_EXPORT.md).")
+	# TODO: MobileAds.initialize()
+	# TODO: preload first rewarded + interstitial
+
+
+func _admob_rewarded() -> void:
+	push_warning("AdManager: AdMob rewarded not yet implemented.")
+	# TODO: load rewarded ad with REWARDED_AD_UNIT_ID
+	# TODO: on user_earned_reward -> _finish_rewarded(true, cb)
+	# TODO: on failed_to_load / dismissed_without_reward -> _finish_rewarded(false, cb)
+	var cb: Callable = _pending_rewarded_callback
+	_pending_rewarded_callback = Callable()
+	_finish_rewarded(false, cb)
+
+
+func _admob_interstitial() -> void:
+	push_warning("AdManager: AdMob interstitial not yet implemented.")
+	# TODO: load + show interstitial with INTERSTITIAL_AD_UNIT_ID
+	# TODO: respect existing 180s cooldown (already enforced by show_commercial_break)
