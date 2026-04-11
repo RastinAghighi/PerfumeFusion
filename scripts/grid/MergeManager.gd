@@ -106,8 +106,7 @@ func _animate_merge(item_a, item_b, target_slot, new_tier: int, new_data: Dictio
 		stats2["highest_tier"] = new_tier
 	SaveManager.data["stats"] = stats2
 
-	var essence_reward: int = 10 * new_tier
-	print("Earned %d essence" % essence_reward)
+	EconomyManager.add_essence(EconomyManager.get_merge_reward(new_tier))
 
 	SaveManager.save_game()
 	emit_signal("merge_completed", new_item, new_tier)

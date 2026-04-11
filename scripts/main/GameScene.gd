@@ -8,6 +8,8 @@ var cooldown_left: float = 0.0
 
 
 func _ready() -> void:
+	DirAccess.remove_absolute("user://save_data.json")
+	SaveManager.data = SaveManager.load_game()
 	var grid: Node = $MarginContainer/VBoxContainer/Grid
 	SpawnManager.set_grid(grid)
 	spawn_button.pressed.connect(_on_spawn_pressed)

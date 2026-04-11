@@ -5,6 +5,7 @@ const TIER_COUNT := 20
 
 var perfumes: Array = []
 var tier_brackets: Dictionary = {}
+var tier_rating_bounds: Array = []
 
 const ACCORD_COLORS := {
 	"floral": Color("#E91E63"),
@@ -50,25 +51,46 @@ func _load_perfumes() -> void:
 
 
 func _bucket_perfumes() -> void:
+	var valid: Array = []
 	for perfume in perfumes:
 		if typeof(perfume) != TYPE_DICTIONARY:
 			continue
 		if not perfume.has("rating"):
 			continue
-		var rating: float = float(perfume["rating"])
-		var tier := get_tier_for_rating(rating)
-		if tier >= 1 and tier <= TIER_COUNT:
-			tier_brackets[tier].append(perfume)
+		valid.append(perfume)
+
+	valid.sort_custom(func(a, b): return float(a["rating"]) < float(b["rating"]))
+
+	tier_rating_bounds.clear()
+	var n: int = valid.size()
+	if n == 0:
+		return
+
+	for i in range(1, TIER_COUNT + 1):
+		var start: int = int(floor(float((i - 1) * n) / float(TIER_COUNT)))
+		var end: int = int(floor(float(i * n) / float(TIER_COUNT)))
+		if end > n:
+			end = n
+		var slice: Array = valid.slice(start, end)
+		tier_brackets[i] = slice
+		if i < TIER_COUNT and end < n:
+			tier_rating_bounds.append(float(valid[end]["rating"]))
 
 
 func _print_summary() -> void:
 	var parts: Array[String] = []
 	var total := 0
 	for i in range(1, TIER_COUNT + 1):
-		var c: int = tier_brackets[i].size()
+		var bracket: Array = tier_brackets[i]
+		var c: int = bracket.size()
 		total += c
-		parts.append("Tier %d: %d perfumes" % [i, c])
-	print("DataManager loaded. %s. Total: %d" % [", ".join(parts), total])
+		var lo: String = "-inf"
+		var hi: String = "+inf"
+		if c > 0:
+			lo = "%.2f" % float(bracket[0]["rating"])
+			hi = "%.2f" % float(bracket[c - 1]["rating"])
+		parts.append("T%d [%s-%s]: %d" % [i, lo, hi, c])
+	print("DataManager tier distribution: %s. Total: %d" % [", ".join(parts), total])
 
 
 func get_random_perfume(tier: int) -> Dictionary:
@@ -81,26 +103,10 @@ func get_random_perfume(tier: int) -> Dictionary:
 
 
 func get_tier_for_rating(rating: float) -> int:
-	if rating < 1.50: return 1
-	if rating < 1.80: return 2
-	if rating < 2.10: return 3
-	if rating < 2.40: return 4
-	if rating < 2.60: return 5
-	if rating < 2.80: return 6
-	if rating < 3.00: return 7
-	if rating < 3.15: return 8
-	if rating < 3.30: return 9
-	if rating < 3.45: return 10
-	if rating < 3.60: return 11
-	if rating < 3.75: return 12
-	if rating < 3.90: return 13
-	if rating < 4.05: return 14
-	if rating < 4.20: return 15
-	if rating < 4.35: return 16
-	if rating < 4.50: return 17
-	if rating < 4.65: return 18
-	if rating < 4.80: return 19
-	return 20
+	for i in range(tier_rating_bounds.size()):
+		if rating < float(tier_rating_bounds[i]):
+			return i + 1
+	return TIER_COUNT
 
 
 func get_tier_color(tier: int) -> Color:

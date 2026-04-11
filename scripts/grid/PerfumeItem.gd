@@ -32,11 +32,18 @@ func setup(p_tier: int, p_data: Dictionary) -> void:
 	$BrandLabel.text = brand_text.capitalize()
 
 	var color: Color = DataManager.get_tier_color(tier)
-	var style: StyleBoxFlat = $BottleShape.get_theme_stylebox("panel")
+	print("Setting up tier ", p_tier, " color: ", color)
+	var style: StyleBoxFlat = $BottleShape.get_theme_stylebox("panel") as StyleBoxFlat
 	if style != null:
-		style = style.duplicate()
-		style.bg_color = color
-		$BottleShape.add_theme_stylebox_override("panel", style)
+		style = style.duplicate() as StyleBoxFlat
+	else:
+		style = StyleBoxFlat.new()
+		style.corner_radius_top_left = 12
+		style.corner_radius_top_right = 12
+		style.corner_radius_bottom_right = 12
+		style.corner_radius_bottom_left = 12
+	style.bg_color = color
+	$BottleShape.add_theme_stylebox_override("panel", style)
 
 
 func _gui_input(event: InputEvent) -> void:
@@ -106,9 +113,8 @@ func _start_drag() -> void:
 	var saved_global_pos: Vector2 = global_position
 	var saved_size: Vector2 = size
 
-	original_slot.remove_item()
-
 	var root := get_tree().root
+	original_slot.remove_item()
 	root.add_child(self)
 	top_level = true
 	z_index = 100
@@ -137,14 +143,21 @@ func _end_press() -> void:
 	if original_slot != null:
 		grid = original_slot.get_parent()
 
+	var target = null
+	if grid != null and grid.has_method("get_slot_at_position"):
+		target = grid.get_slot_at_position(pointer)
+
+	print("Drop pointer: ", pointer)
+	print("Target slot: ", target)
+	print("Grid found: ", grid != null)
+
 	if grid != null and grid.has_method("attempt_drop"):
-		var target = grid.get_slot_at_position(pointer)
 		grid.attempt_drop(self, target)
 	else:
 		_force_return_to_origin()
 
 	# Safety: if we still have no parent or are stranded outside the grid, force back.
-	if is_inside_tree() == false or get_parent() == null or get_parent() == get_tree().root:
+	if not is_inside_tree() or get_parent() == null or get_parent() == get_tree().root:
 		_force_return_to_origin()
 
 

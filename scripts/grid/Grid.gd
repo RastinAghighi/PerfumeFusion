@@ -76,8 +76,7 @@ func attempt_drop(item, target_slot) -> void:
 
 func get_slot_at_position(global_pos: Vector2):
 	for slot in slots:
-		var rect := Rect2(slot.global_position, slot.size)
-		if rect.has_point(global_pos):
+		if slot is Control and slot.get_global_rect().has_point(global_pos):
 			return slot
 	return null
 

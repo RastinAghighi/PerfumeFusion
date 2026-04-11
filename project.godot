@@ -24,6 +24,7 @@ DataManager="*res://scripts/data/DataManager.gd"
 SaveManager="*res://scripts/managers/SaveManager.gd"
 MergeManager="*res://scripts/grid/MergeManager.gd"
 SpawnManager="*res://scripts/managers/SpawnManager.gd"
+EconomyManager="*res://scripts/managers/EconomyManager.gd"
 
 [display]
 
