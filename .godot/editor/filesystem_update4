@@ -1,0 +1,3 @@
+res://scripts/main/GameScene.gd
+res://scripts/managers/SaveManager.gd
+res://scripts/managers/SpawnManager.gd

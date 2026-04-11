@@ -17,6 +17,7 @@ func get_default_data() -> Dictionary:
 		"grid_state": grid_state,
 		"unlocked_perfumes": [],
 		"essence": 0,
+		"free_spawns_used": 0,
 		"upgrades": {
 			"spawn_speed_level": 0,
 			"offline_rate_level": 0,

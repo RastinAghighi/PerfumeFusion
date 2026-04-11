@@ -2,15 +2,22 @@ extends Node
 
 const PerfumeItemScene := preload("res://scenes/grid/PerfumeItem.tscn")
 
-const SPAWN_INTERVALS := [3.0, 2.5, 2.0, 1.5]
+const SPAWN_INTERVALS := [5.0, 4.0, 3.0, 2.0]
 const FRENZY_INTERVAL := 0.5
+const FREE_SPAWN_COUNT := 5
+const MANUAL_SPAWN_COST := 10
 
-var spawn_interval: float = 3.0
-var spawn_timer: float = 3.0
+var spawn_interval: float = 5.0
+var spawn_timer: float = 5.0
 var grid_reference: Node = null
+
+var auto_spawn_enabled: bool = false
 
 var _frenzy_active: bool = false
 var _frenzy_time_left: float = 0.0
+
+signal manual_spawn_failed(reason: String)
+signal manual_spawn_succeeded(remaining_free: int, essence: int)
 
 
 func _ready() -> void:
@@ -38,6 +45,9 @@ func _process(delta: float) -> void:
 			_frenzy_active = false
 
 	if grid_reference == null:
+		return
+
+	if not (auto_spawn_enabled or _frenzy_active):
 		return
 
 	spawn_timer -= delta
@@ -74,6 +84,42 @@ func _fade_in(item: Node) -> void:
 	item.modulate = Color(1, 1, 1, 0)
 	var tween := item.create_tween()
 	tween.tween_property(item, "modulate:a", 1.0, 0.3)
+
+
+func manual_spawn() -> bool:
+	if grid_reference == null or not grid_reference.has_method("get_empty_slots"):
+		manual_spawn_failed.emit("no_grid")
+		return false
+	if grid_reference.get_empty_slots().is_empty():
+		manual_spawn_failed.emit("grid_full")
+		return false
+
+	var free_used: int = int(SaveManager.data.get("free_spawns_used", 0))
+	var is_free: bool = free_used < FREE_SPAWN_COUNT
+	var essence: int = int(SaveManager.data.get("essence", 0))
+
+	if not is_free and essence < MANUAL_SPAWN_COST:
+		manual_spawn_failed.emit("not_enough_essence")
+		return false
+
+	_try_spawn()
+
+	if is_free:
+		SaveManager.data["free_spawns_used"] = free_used + 1
+	else:
+		SaveManager.data["essence"] = essence - MANUAL_SPAWN_COST
+	SaveManager.save_game()
+
+	var remaining_free: int = max(0, FREE_SPAWN_COUNT - int(SaveManager.data["free_spawns_used"]))
+	manual_spawn_succeeded.emit(remaining_free, int(SaveManager.data["essence"]))
+	return true
+
+
+func get_manual_spawn_cost() -> int:
+	var free_used: int = int(SaveManager.data.get("free_spawns_used", 0))
+	if free_used < FREE_SPAWN_COUNT:
+		return 0
+	return MANUAL_SPAWN_COST
 
 
 func start_frenzy(duration: float) -> void:
