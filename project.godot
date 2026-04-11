@@ -20,6 +20,7 @@ config/features=PackedStringArray("4.6", "Forward Plus")
 [autoload]
 
 DataManager="*res://scripts/data/DataManager.gd"
+SaveManager="*res://scripts/managers/SaveManager.gd"
 
 [display]
 
