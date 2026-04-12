@@ -43,6 +43,11 @@ func _ready() -> void:
 	add_child(hud)
 
 	AudioManager.register_bgm_player($BGM)
+
+	BattleManager.start_battle(current_opponent)
+	BattleManager.damage_dealt.connect(_on_damage_dealt)
+	BattleManager.opponent_defeated.connect(_on_opponent_defeated)
+
 	battle_active = true
 
 
@@ -52,14 +57,13 @@ func _process(delta: float) -> void:
 
 	time_remaining -= delta
 	_update_timer_display()
+
+	opponent_hp = BattleManager.opponent_hp
 	_update_hp_display()
 
 	if time_remaining <= 0.0:
 		time_remaining = 0.0
 		_battle_lost()
-	elif opponent_hp <= 0.0:
-		opponent_hp = 0.0
-		_battle_won()
 
 
 func _setup_battle_hud() -> void:
@@ -128,20 +132,99 @@ func _spawn_starting_perfumes() -> void:
 		item.setup(1, perfume_data)
 
 
-func deal_damage(amount: float) -> void:
+func _on_damage_dealt(amount: float, is_super_effective: bool, is_resisted: bool) -> void:
 	if not battle_active:
 		return
-	opponent_hp -= amount
+	opponent_hp = BattleManager.opponent_hp
 	_update_hp_display()
+	_show_damage_number(amount, is_super_effective, is_resisted)
+
+
+func _on_opponent_defeated() -> void:
+	_battle_won()
+
+
+func _show_damage_number(amount: float, is_super_effective: bool, is_resisted: bool) -> void:
+	var layer := CanvasLayer.new()
+	layer.layer = 60
+	add_child(layer)
+
+	var container := Control.new()
+	container.set_anchors_preset(Control.PRESET_FULL_RECT)
+	layer.add_child(container)
+
+	var damage_label := Label.new()
+	damage_label.text = str(int(amount))
+	damage_label.add_theme_font_size_override("font_size", 48)
+	damage_label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
+	damage_label.add_theme_constant_override("outline_size", 6)
+	damage_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+
+	if is_super_effective and not is_resisted:
+		damage_label.add_theme_color_override("font_color", Color(0.3, 1.0, 0.3, 1.0))
+	elif is_resisted and not is_super_effective:
+		damage_label.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6, 1.0))
+	else:
+		damage_label.add_theme_color_override("font_color", Color(1, 1, 1, 1))
+
+	damage_label.anchor_left = 0.5
+	damage_label.anchor_right = 0.5
+	damage_label.anchor_top = 0.08
+	damage_label.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	container.add_child(damage_label)
+
+	var tween := damage_label.create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(damage_label, "position:y", damage_label.position.y - 60.0, 0.8)
+	tween.tween_property(damage_label, "modulate:a", 0.0, 0.8).set_delay(0.2)
+
+	if is_super_effective and not is_resisted:
+		var effect_label := Label.new()
+		effect_label.text = "SUPER EFFECTIVE!"
+		effect_label.add_theme_font_size_override("font_size", 32)
+		effect_label.add_theme_color_override("font_color", Color(0.3, 1.0, 0.3, 1.0))
+		effect_label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
+		effect_label.add_theme_constant_override("outline_size", 4)
+		effect_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		effect_label.anchor_left = 0.5
+		effect_label.anchor_right = 0.5
+		effect_label.anchor_top = 0.14
+		effect_label.grow_horizontal = Control.GROW_DIRECTION_BOTH
+		container.add_child(effect_label)
+
+		var etween := effect_label.create_tween()
+		etween.tween_interval(0.4)
+		etween.tween_property(effect_label, "modulate:a", 0.0, 0.4)
+	elif is_resisted and not is_super_effective:
+		var effect_label := Label.new()
+		effect_label.text = "RESISTED..."
+		effect_label.add_theme_font_size_override("font_size", 32)
+		effect_label.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6, 1.0))
+		effect_label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
+		effect_label.add_theme_constant_override("outline_size", 4)
+		effect_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		effect_label.anchor_left = 0.5
+		effect_label.anchor_right = 0.5
+		effect_label.anchor_top = 0.14
+		effect_label.grow_horizontal = Control.GROW_DIRECTION_BOTH
+		container.add_child(effect_label)
+
+		var etween := effect_label.create_tween()
+		etween.tween_interval(0.4)
+		etween.tween_property(effect_label, "modulate:a", 0.0, 0.4)
+
+	tween.chain().tween_callback(layer.queue_free)
 
 
 func _battle_won() -> void:
 	battle_active = false
+	BattleManager.end_battle()
 	_stop_timer_pulse()
 
 
 func _battle_lost() -> void:
 	battle_active = false
+	BattleManager.end_battle()
 	_stop_timer_pulse()
 
 

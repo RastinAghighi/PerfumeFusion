@@ -171,6 +171,9 @@ func _animate_merge(item_a, item_b, target_slot, new_tier: int, new_data: Dictio
 
 	AudioManager.play_merge()
 
+	if BattleManager.is_battle_active:
+		BattleManager.deal_damage(new_tier, new_data)
+
 	SaveManager.save_game()
 	emit_signal("merge_completed", new_item, new_tier)
 

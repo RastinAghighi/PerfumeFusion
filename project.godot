@@ -29,6 +29,7 @@ AdManager="*res://scripts/managers/AdManager.gd"
 RareDropManager="*res://scripts/managers/RareDropManager.gd"
 AudioManager="*res://scripts/managers/AudioManager.gd"
 OpponentManager="*res://scripts/data/OpponentManager.gd"
+BattleManager="*res://scripts/managers/BattleManager.gd"
 
 [display]
 
