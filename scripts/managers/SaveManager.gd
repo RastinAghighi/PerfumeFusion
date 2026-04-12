@@ -38,6 +38,7 @@ func get_default_data() -> Dictionary:
 			"muted": false,
 		},
 		"tutorial_completed": false,
+		"beaten_opponents": [],
 	}
 
 
