@@ -1,0 +1,89 @@
+[gd_scene load_steps=4 format=3 uid="uid://cbattleselect01"]
+
+[ext_resource type="Script" path="res://scripts/ui/BattleSelect.gd" id="1_bs"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
+bg_color = Color(0.08, 0.06, 0.12, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_back_normal"]
+bg_color = Color(0.18, 0.14, 0.28, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.45, 0.32, 0.7, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="BattleSelect" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_bs")
+
+[node name="Background" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bg")
+
+[node name="MainVBox" type="VBoxContainer" parent="Background"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="TopBar" type="HBoxContainer" parent="Background/MainVBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 55)
+theme_override_constants/separation = 12
+
+[node name="BackButton" type="Button" parent="Background/MainVBox/TopBar"]
+layout_mode = 2
+custom_minimum_size = Vector2(90, 40)
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_back_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_back_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_back_normal")
+text = "← Back"
+
+[node name="TitleLabel" type="Label" parent="Background/MainVBox/TopBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 0.95, 0.85, 1)
+theme_override_font_sizes/font_size = 28
+text = "Choose Your Opponent"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EssenceLabel" type="Label" parent="Background/MainVBox/TopBar"]
+layout_mode = 2
+custom_minimum_size = Vector2(120, 0)
+theme_override_colors/font_color = Color(0.95, 0.8, 0.2, 1)
+theme_override_font_sizes/font_size = 18
+text = "0 Essence"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Background/MainVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CardContainer" type="VBoxContainer" parent="Background/MainVBox/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 12

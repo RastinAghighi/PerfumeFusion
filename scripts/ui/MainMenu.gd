@@ -29,7 +29,7 @@ func _on_free_play() -> void:
 
 
 func _on_battle() -> void:
-	print("Battle mode coming soon")
+	get_tree().change_scene_to_file("res://scenes/ui/BattleSelect.tscn")
 
 
 func _on_collection() -> void:
