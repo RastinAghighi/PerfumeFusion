@@ -1,6 +1,7 @@
 extends Node
 
 var opponents: Array = []
+var selected_opponent_id: int = -1
 
 
 func _ready() -> void:

@@ -240,7 +240,8 @@ func _on_opponent_selected(opponent_id: int) -> void:
 	var opponent: Dictionary = OpponentManager.get_opponent(opponent_id)
 	if opponent.is_empty():
 		return
-	print("Starting battle against: " + str(opponent["name"]))
+	OpponentManager.selected_opponent_id = opponent_id
+	get_tree().change_scene_to_file("res://scenes/main/BattleScene.tscn")
 
 
 func _on_back() -> void:

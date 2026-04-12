@@ -1,0 +1,245 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/grid/Grid.gd" id="1_grid"]
+[ext_resource type="PackedScene" uid="uid://b7oyqqgk8105i" path="res://scenes/grid/GridSlot.tscn" id="2_slot"]
+[ext_resource type="Script" path="res://scripts/main/BattleScene.gd" id="3_battle"]
+[ext_resource type="Script" path="res://scripts/grid/SellZone.gd" id="4_sell"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
+bg_color = Color(0.08, 0.06, 0.12, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hpbar"]
+bg_color = Color(0.85, 0.25, 0.2, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="BattleScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_battle")
+
+[node name="Background" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bg")
+
+[node name="BattleHUD" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 180.0
+grow_horizontal = 2
+
+[node name="VBox" type="VBoxContainer" parent="BattleHUD"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="TopMargin" type="Control" parent="BattleHUD/VBox"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+
+[node name="OpponentRow" type="HBoxContainer" parent="BattleHUD/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="PlayerInfo" type="VBoxContainer" parent="BattleHUD/VBox/OpponentRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="YouLabel" type="Label" parent="BattleHUD/VBox/OpponentRow/PlayerInfo"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "YOU"
+horizontal_alignment = 1
+
+[node name="VSLabel" type="Label" parent="BattleHUD/VBox/OpponentRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.3, 1)
+theme_override_font_sizes/font_size = 20
+text = "VS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="OpponentInfo" type="VBoxContainer" parent="BattleHUD/VBox/OpponentRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="OpponentName" type="Label" parent="BattleHUD/VBox/OpponentRow/OpponentInfo"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.55, 0.55, 1)
+theme_override_font_sizes/font_size = 16
+text = "Opponent Name"
+horizontal_alignment = 1
+
+[node name="OpponentTitle" type="Label" parent="BattleHUD/VBox/OpponentRow/OpponentInfo"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.6, 0.8, 1)
+theme_override_font_sizes/font_size = 12
+text = "The Title"
+horizontal_alignment = 1
+
+[node name="HPBar" type="ProgressBar" parent="BattleHUD/VBox"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/fill = SubResource("StyleBoxFlat_hpbar")
+max_value = 1000.0
+value = 1000.0
+show_percentage = false
+
+[node name="HPLabel" type="Label" parent="BattleHUD/VBox/HPBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "1000 / 1000 HP"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TimerLabel" type="Label" parent="BattleHUD/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 32
+text = "2:00"
+horizontal_alignment = 1
+
+[node name="WeaknessRow" type="HBoxContainer" parent="BattleHUD/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="WeakLabel" type="Label" parent="BattleHUD/VBox/WeaknessRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.9, 0.4, 1)
+theme_override_font_sizes/font_size = 12
+text = "Weak: floral, sweet"
+
+[node name="ResistLabel" type="Label" parent="BattleHUD/VBox/WeaknessRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.45, 0.45, 1)
+theme_override_font_sizes/font_size = 12
+text = "Resists: woody, musky"
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="TopSpacer" type="Control" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 185)
+layout_mode = 2
+
+[node name="Grid" type="GridContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 5
+script = ExtResource("1_grid")
+
+[node name="GridSlot0" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+[node name="GridSlot1" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+[node name="GridSlot2" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+[node name="GridSlot3" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+[node name="GridSlot4" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+[node name="GridSlot5" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+[node name="GridSlot6" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+[node name="GridSlot7" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+[node name="GridSlot8" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+[node name="GridSlot9" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+[node name="GridSlot10" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+[node name="GridSlot11" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+[node name="GridSlot12" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+[node name="GridSlot13" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+[node name="GridSlot14" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+[node name="GridSlot15" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+[node name="GridSlot16" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+[node name="GridSlot17" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+[node name="GridSlot18" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+[node name="GridSlot19" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+[node name="GridSlot20" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+[node name="GridSlot21" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+[node name="GridSlot22" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+[node name="GridSlot23" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+[node name="GridSlot24" parent="MarginContainer/VBoxContainer/Grid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="SellZone" type="Panel" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("4_sell")
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/SellZone"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.7, 0.6, 0.5, 0.8)
+theme_override_font_sizes/font_size = 16
+text = "Drag here to sell"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BottomSpacer" type="Control" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 110)
+layout_mode = 2
+
+[node name="BGM" type="AudioStreamPlayer" parent="." groups=["bgm"]]
+autoplay = true
+bus = &"Master"
