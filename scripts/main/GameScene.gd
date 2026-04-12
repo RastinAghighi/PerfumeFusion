@@ -8,6 +8,7 @@ const PerfumeItemScene := preload("res://scenes/grid/PerfumeItem.tscn")
 func _ready() -> void:
 	SaveManager.data = SaveManager.load_game()
 	var grid: Node = $MarginContainer/VBoxContainer/Grid
+	grid.sell_zone = $MarginContainer/VBoxContainer/SellZone
 	SpawnManager.set_grid(grid)
 	EconomyManager.essence = int(SaveManager.data.get("essence", 0))
 

@@ -3,6 +3,7 @@ extends GridContainer
 const PerfumeItemScene := preload("res://scenes/grid/PerfumeItem.tscn")
 
 var slots: Array = []
+var sell_zone: Node = null
 
 func _ready() -> void:
 	slots.clear()
@@ -55,7 +56,10 @@ func _update_slot_sizes() -> void:
 		slot.custom_minimum_size = sq
 
 
-func attempt_drop(item, target_slot) -> void:
+func attempt_drop(item, target_slot, drop_position: Vector2 = Vector2.ZERO) -> void:
+	if sell_zone != null and sell_zone is Control and sell_zone.get_global_rect().has_point(drop_position):
+		_sell_item(item)
+		return
 	if target_slot == null:
 		_return_to_origin(item)
 		return
@@ -79,6 +83,19 @@ func get_slot_at_position(global_pos: Vector2):
 		if slot is Control and slot.get_global_rect().has_point(global_pos):
 			return slot
 	return null
+
+
+func _sell_item(item) -> void:
+	var tier: int = item.tier
+	var value: int = sell_zone.get_sell_value(tier)
+	if item.get_parent() != null:
+		item.get_parent().remove_child(item)
+	item.original_slot = null
+	item.queue_free()
+	EconomyManager.add_essence(value)
+	sell_zone.show_sell_text(value)
+	sell_zone.unhighlight()
+	SaveManager.save_game()
 
 
 func _return_to_origin(item) -> void:

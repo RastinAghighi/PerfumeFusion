@@ -103,6 +103,12 @@ func _process(_delta: float) -> void:
 	if is_dragging:
 		var pointer := get_global_mouse_position()
 		global_position = pointer - size * 0.5
+		var grid = original_slot.get_parent() if original_slot else null
+		if grid and grid.sell_zone and grid.sell_zone is Control:
+			if grid.sell_zone.get_global_rect().has_point(pointer):
+				grid.sell_zone.highlight()
+			else:
+				grid.sell_zone.unhighlight()
 
 
 func _begin_press() -> void:
@@ -169,7 +175,7 @@ func _end_press() -> void:
 	print("Grid found: ", grid != null)
 
 	if grid != null and grid.has_method("attempt_drop"):
-		grid.attempt_drop(self, target)
+		grid.attempt_drop(self, target, pointer)
 	else:
 		_force_return_to_origin()
 
