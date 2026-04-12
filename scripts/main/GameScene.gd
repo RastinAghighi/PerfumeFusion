@@ -2,6 +2,7 @@ extends Control
 
 const HUDScene := preload("res://scenes/ui/HUD.tscn")
 const WelcomeBackScene := preload("res://scenes/ui/WelcomeBack.tscn")
+const TutorialScene := preload("res://scenes/ui/Tutorial.tscn")
 const PerfumeItemScene := preload("res://scenes/grid/PerfumeItem.tscn")
 
 
@@ -19,6 +20,9 @@ func _ready() -> void:
 
 	if OS.has_feature("web"):
 		AdManager.init_poki()
+
+	if not SaveManager.data.get("tutorial_completed", false):
+		add_child(TutorialScene.instantiate())
 
 	_check_offline_earnings()
 

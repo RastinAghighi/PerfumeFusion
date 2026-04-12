@@ -37,6 +37,7 @@ func get_default_data() -> Dictionary:
 			"sfx_volume": 1.0,
 			"muted": false,
 		},
+		"tutorial_completed": false,
 	}
 
 
