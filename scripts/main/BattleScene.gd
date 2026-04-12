@@ -2,6 +2,7 @@ extends Control
 
 const HUDScene := preload("res://scenes/ui/HUD.tscn")
 const PerfumeItemScene := preload("res://scenes/grid/PerfumeItem.tscn")
+const BattleResultScene := preload("res://scenes/ui/BattleResult.tscn")
 
 @onready var grid: Node = $MarginContainer/VBoxContainer/Grid
 @onready var sell_zone: Node = $MarginContainer/VBoxContainer/SellZone
@@ -20,6 +21,10 @@ var time_remaining: float = 0.0
 var battle_active: bool = false
 
 var _timer_pulse_tween: Tween = null
+
+var _stat_total_merges: int = 0
+var _stat_highest_tier: int = 0
+var _stat_damage_dealt: float = 0.0
 
 
 func _ready() -> void:
@@ -47,6 +52,7 @@ func _ready() -> void:
 	BattleManager.start_battle(current_opponent)
 	BattleManager.damage_dealt.connect(_on_damage_dealt)
 	BattleManager.opponent_defeated.connect(_on_opponent_defeated)
+	MergeManager.merge_completed.connect(_on_merge_completed)
 
 	battle_active = true
 
@@ -132,9 +138,18 @@ func _spawn_starting_perfumes() -> void:
 		item.setup(1, perfume_data)
 
 
+func _on_merge_completed(_new_item, tier: int) -> void:
+	if not battle_active:
+		return
+	_stat_total_merges += 1
+	if tier > _stat_highest_tier:
+		_stat_highest_tier = tier
+
+
 func _on_damage_dealt(amount: float, is_super_effective: bool, is_resisted: bool) -> void:
 	if not battle_active:
 		return
+	_stat_damage_dealt += amount
 	opponent_hp = BattleManager.opponent_hp
 	_update_hp_display()
 	_show_damage_number(amount, is_super_effective, is_resisted)
@@ -216,16 +231,32 @@ func _show_damage_number(amount: float, is_super_effective: bool, is_resisted: b
 	tween.chain().tween_callback(layer.queue_free)
 
 
+func _build_stats() -> Dictionary:
+	return {
+		"time_taken": float(current_opponent.get("time_limit", 120)) - time_remaining,
+		"total_merges": _stat_total_merges,
+		"highest_tier": _stat_highest_tier,
+		"damage_dealt": _stat_damage_dealt,
+		"max_hp": opponent_max_hp,
+	}
+
+
 func _battle_won() -> void:
 	battle_active = false
 	BattleManager.end_battle()
 	_stop_timer_pulse()
+	var result := BattleResultScene.instantiate()
+	add_child(result)
+	result.show_victory(current_opponent, _build_stats())
 
 
 func _battle_lost() -> void:
 	battle_active = false
 	BattleManager.end_battle()
 	_stop_timer_pulse()
+	var result := BattleResultScene.instantiate()
+	add_child(result)
+	result.show_defeat(current_opponent, _build_stats())
 
 
 func _notification(what: int) -> void:

@@ -1,0 +1,204 @@
+[gd_scene load_steps=7 format=3 uid="uid://b5r2y8kqp1v3a"]
+
+[ext_resource type="Script" path="res://scripts/ui/BattleResult.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.1, 0.08, 0.16, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45, 0.32, 0.7, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+content_margin_left = 40.0
+content_margin_top = 10.0
+content_margin_right = 40.0
+content_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_sep"]
+color = Color(0.35, 0.28, 0.55, 0.5)
+thickness = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_normal"]
+bg_color = Color(0.18, 0.14, 0.28, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.45, 0.32, 0.7, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
+bg_color = Color(0.26, 0.2, 0.4, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.65, 0.48, 0.95, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_pressed"]
+bg_color = Color(0.12, 0.09, 0.2, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.55, 0.4, 0.85, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="BattleResult" type="CanvasLayer"]
+layer = 50
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.7)
+
+[node name="PanelContainer" type="PanelContainer" parent="Background"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -320.0
+offset_right = 400.0
+offset_bottom = 320.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBox" type="VBoxContainer" parent="Background/PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="TopPad" type="Control" parent="Background/PanelContainer/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 20)
+
+[node name="ResultLabel" type="Label" parent="Background/PanelContainer/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "VICTORY!"
+horizontal_alignment = 1
+
+[node name="OpponentLabel" type="Label" parent="Background/PanelContainer/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.7, 0.65, 0.8, 1)
+text = "You defeated Gym Bro Gary!"
+horizontal_alignment = 1
+
+[node name="Sep1" type="HSeparator" parent="Background/PanelContainer/VBox"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_sep")
+
+[node name="StatsBox" type="VBoxContainer" parent="Background/PanelContainer/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TimeStat" type="Label" parent="Background/PanelContainer/VBox/StatsBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.85, 0.85, 0.9, 1)
+text = "Time: 1:23"
+horizontal_alignment = 1
+
+[node name="MergesStat" type="Label" parent="Background/PanelContainer/VBox/StatsBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.85, 0.85, 0.9, 1)
+text = "Merges: 12"
+horizontal_alignment = 1
+
+[node name="TierStat" type="Label" parent="Background/PanelContainer/VBox/StatsBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.85, 0.85, 0.9, 1)
+text = "Highest Tier: 5"
+horizontal_alignment = 1
+
+[node name="DamageStat" type="Label" parent="Background/PanelContainer/VBox/StatsBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.85, 0.85, 0.9, 1)
+text = "Damage Dealt: 100 / 100 HP"
+horizontal_alignment = 1
+
+[node name="Sep2" type="HSeparator" parent="Background/PanelContainer/VBox"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_sep")
+
+[node name="RewardsBox" type="VBoxContainer" parent="Background/PanelContainer/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="RewardsTitle" type="Label" parent="Background/PanelContainer/VBox/RewardsBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(1, 0.95, 0.85, 1)
+text = "Rewards:"
+horizontal_alignment = 1
+
+[node name="EssenceReward" type="Label" parent="Background/PanelContainer/VBox/RewardsBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.95, 0.8, 0.2, 1)
+text = "+200 Essence"
+horizontal_alignment = 1
+
+[node name="UnlockReward" type="Label" parent="Background/PanelContainer/VBox/RewardsBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.3, 1, 0.3, 1)
+text = "NEW! Next opponent unlocked!"
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="Background/PanelContainer/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ButtonRow" type="HBoxContainer" parent="Background/PanelContainer/VBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 20
+
+[node name="LeftButton" type="Button" parent="Background/PanelContainer/VBox/ButtonRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(180, 50)
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+text = "Continue"
+
+[node name="RightButton" type="Button" parent="Background/PanelContainer/VBox/ButtonRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(180, 50)
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+text = "Replay"
+
+[node name="BottomPad" type="Control" parent="Background/PanelContainer/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 20)
