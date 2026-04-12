@@ -21,6 +21,13 @@ var time_remaining: float = 0.0
 var battle_active: bool = false
 
 var _timer_pulse_tween: Tween = null
+var _combo_pulse_tween: Tween = null
+var _combo_fade_tween: Tween = null
+var _combo_layer: CanvasLayer = null
+var _combo_container: Control = null
+var _combo_label: Label = null
+var _combo_timer_bar: ProgressBar = null
+var _current_combo: int = 0
 
 var _stat_total_merges: int = 0
 var _stat_highest_tier: int = 0
@@ -49,9 +56,12 @@ func _ready() -> void:
 
 	AudioManager.register_bgm_player($BGM)
 
+	_setup_combo_ui()
+
 	BattleManager.start_battle(current_opponent)
 	BattleManager.damage_dealt.connect(_on_damage_dealt)
 	BattleManager.opponent_defeated.connect(_on_opponent_defeated)
+	BattleManager.combo_updated.connect(_on_combo_updated)
 	MergeManager.merge_completed.connect(_on_merge_completed)
 
 	battle_active = true
@@ -66,6 +76,9 @@ func _process(delta: float) -> void:
 
 	opponent_hp = BattleManager.opponent_hp
 	_update_hp_display()
+
+	if _current_combo > 0 and _combo_timer_bar != null:
+		_combo_timer_bar.value = BattleManager.combo_timer
 
 	if time_remaining <= 0.0:
 		time_remaining = 0.0
@@ -229,6 +242,87 @@ func _show_damage_number(amount: float, is_super_effective: bool, is_resisted: b
 		etween.tween_property(effect_label, "modulate:a", 0.0, 0.4)
 
 	tween.chain().tween_callback(layer.queue_free)
+
+
+func _setup_combo_ui() -> void:
+	_combo_layer = CanvasLayer.new()
+	_combo_layer.layer = 50
+	add_child(_combo_layer)
+
+	_combo_container = Control.new()
+	_combo_container.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_combo_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_combo_layer.add_child(_combo_container)
+
+	var center := CenterContainer.new()
+	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	center.anchor_top = 0.35
+	center.anchor_bottom = 0.5
+	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_combo_container.add_child(center)
+
+	var vbox := VBoxContainer.new()
+	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	vbox.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	center.add_child(vbox)
+
+	_combo_label = Label.new()
+	_combo_label.text = ""
+	_combo_label.add_theme_font_size_override("font_size", 48)
+	_combo_label.add_theme_color_override("font_color", Color(1.0, 0.85, 0.2, 1.0))
+	_combo_label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
+	_combo_label.add_theme_constant_override("outline_size", 6)
+	_combo_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_combo_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_combo_label.pivot_offset = Vector2(0, 0)
+	vbox.add_child(_combo_label)
+
+	_combo_timer_bar = ProgressBar.new()
+	_combo_timer_bar.custom_minimum_size = Vector2(120, 6)
+	_combo_timer_bar.max_value = BattleManager.COMBO_WINDOW
+	_combo_timer_bar.value = 0.0
+	_combo_timer_bar.show_percentage = false
+	_combo_timer_bar.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	_combo_timer_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var bar_style := StyleBoxFlat.new()
+	bar_style.bg_color = Color(1.0, 0.85, 0.2, 0.9)
+	bar_style.corner_radius_top_left = 3
+	bar_style.corner_radius_top_right = 3
+	bar_style.corner_radius_bottom_right = 3
+	bar_style.corner_radius_bottom_left = 3
+	_combo_timer_bar.add_theme_stylebox_override("fill", bar_style)
+	vbox.add_child(_combo_timer_bar)
+
+	_combo_container.modulate.a = 0.0
+
+
+func _on_combo_updated(count: int, _time_left: float) -> void:
+	_current_combo = count
+
+	if count == 0:
+		if _combo_fade_tween != null and _combo_fade_tween.is_valid():
+			_combo_fade_tween.kill()
+		_combo_fade_tween = create_tween()
+		_combo_fade_tween.tween_property(_combo_container, "modulate:a", 0.0, 0.3)
+		return
+
+	if count < 2:
+		_combo_container.modulate.a = 0.0
+		return
+
+	_combo_label.text = "x%d COMBO!" % count
+	_combo_timer_bar.value = BattleManager.COMBO_WINDOW
+	_combo_container.modulate.a = 1.0
+
+	if _combo_fade_tween != null and _combo_fade_tween.is_valid():
+		_combo_fade_tween.kill()
+
+	if _combo_pulse_tween != null and _combo_pulse_tween.is_valid():
+		_combo_pulse_tween.kill()
+	_combo_label.scale = Vector2(1.0, 1.0)
+	_combo_pulse_tween = create_tween()
+	_combo_pulse_tween.tween_property(_combo_label, "scale", Vector2(1.3, 1.3), 0.1)
+	_combo_pulse_tween.tween_property(_combo_label, "scale", Vector2(1.0, 1.0), 0.15)
 
 
 func _build_stats() -> Dictionary:
