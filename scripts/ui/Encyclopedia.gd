@@ -41,9 +41,9 @@ func _ready() -> void:
 	for i in range(_tier_buttons.size()):
 		var idx := i
 		_tier_buttons[i].pressed.connect(func(): _on_tier_filter(idx))
-	var gender_keys := ["all", "men", "women", "unisex"]
+	var gender_keys: Array[String] = ["all", "men", "women", "unisex"]
 	for i in range(_gender_buttons.size()):
-		var key := gender_keys[i]
+		var key: String = gender_keys[i]
 		_gender_buttons[i].pressed.connect(func(): _on_gender_filter(key))
 
 	load_more_button.pressed.connect(_on_load_more_pressed)
