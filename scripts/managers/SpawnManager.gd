@@ -4,6 +4,16 @@ const PerfumeItemScene := preload("res://scenes/grid/PerfumeItem.tscn")
 
 const SPAWN_INTERVALS := [3.0, 2.5, 2.0, 1.5]
 const FRENZY_INTERVAL := 0.5
+const COOLDOWN_BY_HIGHEST_TIER := [
+	[3, 3.0],
+	[6, 4.0],
+	[9, 5.0],
+	[12, 7.0],
+	[15, 10.0],
+	[18, 14.0],
+	[20, 20.0],
+]
+const COOLDOWN_REDUCTIONS := [0.0, 0.15, 0.30, 0.45]
 const SPAWN_COST_TIERS := [
 	[5, 0],
 	[15, 10],
@@ -20,14 +30,18 @@ var auto_spawn_enabled: bool = false
 
 var _frenzy_active: bool = false
 var _frenzy_time_left: float = 0.0
+var manual_cooldown_left: float = 0.0
+var _last_base_cooldown: float = 3.0
 
 signal manual_spawn_failed(reason: String)
 signal manual_spawn_succeeded(remaining_free: int, essence: int)
+signal spawn_cooldown_increased
 
 
 func _ready() -> void:
 	spawn_interval = get_current_spawn_interval()
 	spawn_timer = spawn_interval
+	_last_base_cooldown = get_base_manual_cooldown()
 
 
 func set_grid(grid: Node) -> void:
@@ -44,6 +58,9 @@ func get_current_spawn_interval() -> float:
 
 
 func _process(delta: float) -> void:
+	if manual_cooldown_left > 0.0:
+		manual_cooldown_left = max(0.0, manual_cooldown_left - delta)
+
 	if _frenzy_active:
 		_frenzy_time_left -= delta
 		if _frenzy_time_left <= 0.0:
@@ -132,6 +149,38 @@ func start_frenzy(duration: float) -> void:
 
 func is_frenzy_active() -> bool:
 	return _frenzy_active
+
+
+func get_base_manual_cooldown() -> float:
+	var highest: int = int(SaveManager.data.get("stats", {}).get("highest_tier", 0))
+	for entry in COOLDOWN_BY_HIGHEST_TIER:
+		if highest <= int(entry[0]):
+			return float(entry[1])
+	return 20.0
+
+
+func get_manual_cooldown() -> float:
+	var base: float = get_base_manual_cooldown()
+	var level: int = int(SaveManager.data.get("upgrades", {}).get("spawn_cooldown_level", 0))
+	level = clampi(level, 0, COOLDOWN_REDUCTIONS.size() - 1)
+	return base * (1.0 - COOLDOWN_REDUCTIONS[level])
+
+
+func start_manual_cooldown() -> void:
+	manual_cooldown_left = get_manual_cooldown()
+
+
+func is_manual_on_cooldown() -> bool:
+	return manual_cooldown_left > 0.0
+
+
+func check_cooldown_bracket_change() -> void:
+	var new_base: float = get_base_manual_cooldown()
+	if new_base > _last_base_cooldown:
+		_last_base_cooldown = new_base
+		spawn_cooldown_increased.emit()
+	else:
+		_last_base_cooldown = new_base
 
 
 func spawn_at_tier(tier: int) -> bool:

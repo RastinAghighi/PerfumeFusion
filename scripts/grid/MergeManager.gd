@@ -165,6 +165,7 @@ func _animate_merge(item_a, item_b, target_slot, new_tier: int, new_data: Dictio
 	if new_tier > int(stats2.get("highest_tier", 0)):
 		stats2["highest_tier"] = new_tier
 	SaveManager.data["stats"] = stats2
+	SpawnManager.check_cooldown_bracket_change()
 
 	EconomyManager.add_essence(EconomyManager.get_merge_reward(new_tier))
 

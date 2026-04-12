@@ -31,6 +31,15 @@ func _build_upgrade_defs() -> Array:
 			"is_bool": false,
 		},
 		{
+			"key": "spawn_cooldown_level",
+			"name": "Spawn Cooldown",
+			"desc": "Reduce manual spawn cooldown time",
+			"effect": "0% → 15% → 30% → 45%",
+			"costs": [5000, 20000, 75000],
+			"max_level": 3,
+			"is_bool": false,
+		},
+		{
 			"key": "offline_rate_level",
 			"name": "Offline Earnings",
 			"desc": "Earn more while you're away",

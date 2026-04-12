@@ -26,6 +26,7 @@ var _frenzy_time_left: float = 0.0
 var _frenzy_active: bool = false
 var _frenzy_awaiting_ad: bool = false
 var _border_tween: Tween = null
+var _cooldown_label: Label = null
 
 
 func _ready() -> void:
@@ -41,10 +42,12 @@ func _ready() -> void:
 		btn.pressed.connect(AudioManager.play_button)
 	RareDropManager.rare_drop_available.connect(_on_rare_drop_available)
 	RareDropManager.rare_drop_expired.connect(_on_rare_drop_expired)
+	SpawnManager.spawn_cooldown_increased.connect(_on_spawn_cooldown_increased)
 	grid_full_label.modulate.a = 0.0
 	rare_drop_button.visible = false
 	frenzy_border.visible = false
 	frenzy_countdown.visible = false
+	_create_cooldown_label()
 	_update_essence_label(EconomyManager.get_essence(), false)
 	_update_buy_button_text()
 	_update_frenzy_button_text()
@@ -61,6 +64,8 @@ func _process(delta: float) -> void:
 			_end_frenzy()
 		else:
 			frenzy_countdown.text = "FRENZY: %ds" % int(ceil(_frenzy_time_left))
+
+	_update_spawn_cooldown_display()
 
 
 func _on_essence_changed(new_amount: int) -> void:
@@ -88,6 +93,8 @@ func _update_buy_button_text() -> void:
 
 
 func _on_buy_pressed() -> void:
+	if SpawnManager.is_manual_on_cooldown():
+		return
 	if SpawnManager.grid_reference == null:
 		return
 	if SpawnManager.grid_reference.is_full():
@@ -109,6 +116,7 @@ func _on_buy_pressed() -> void:
 	var total: int = int(SaveManager.data.get("total_spawns", 0)) + 1
 	SaveManager.data["total_spawns"] = total
 	SaveManager.save_game()
+	SpawnManager.start_manual_cooldown()
 	_update_buy_button_text()
 
 
@@ -216,6 +224,42 @@ func _update_frenzy_button_text() -> void:
 	frenzy_button.text = "⚡ Frenzy"
 	if not _frenzy_awaiting_ad:
 		frenzy_button.disabled = false
+
+
+func _create_cooldown_label() -> void:
+	_cooldown_label = Label.new()
+	_cooldown_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_cooldown_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_cooldown_label.add_theme_font_size_override("font_size", 14)
+	_cooldown_label.add_theme_color_override("font_color", Color(0.75, 0.7, 0.88, 1))
+	_cooldown_label.anchor_left = 0.5
+	_cooldown_label.anchor_right = 0.5
+	_cooldown_label.anchor_top = 1.0
+	_cooldown_label.anchor_bottom = 1.0
+	_cooldown_label.offset_left = -60.0
+	_cooldown_label.offset_right = 60.0
+	_cooldown_label.offset_top = -120.0
+	_cooldown_label.offset_bottom = -104.0
+	_cooldown_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_cooldown_label)
+	_cooldown_label.text = "Cooldown: %.1fs" % SpawnManager.get_manual_cooldown()
+
+
+func _update_spawn_cooldown_display() -> void:
+	if SpawnManager.is_manual_on_cooldown():
+		buy_button.disabled = true
+		buy_button.text = "Spawn %.1fs" % SpawnManager.manual_cooldown_left
+		if _cooldown_label != null:
+			_cooldown_label.text = "Cooldown: %.1fs" % SpawnManager.get_manual_cooldown()
+	else:
+		buy_button.disabled = false
+		_update_buy_button_text()
+		if _cooldown_label != null:
+			_cooldown_label.text = "Cooldown: %.1fs" % SpawnManager.get_manual_cooldown()
+
+
+func _on_spawn_cooldown_increased() -> void:
+	show_grid_full_message("Spawning slowed! Upgrade in Shop.")
 
 
 func _format_cooldown(seconds: float) -> String:

@@ -20,6 +20,7 @@ func get_default_data() -> Dictionary:
 		"total_spawns": 0,
 		"upgrades": {
 			"spawn_speed_level": 0,
+			"spawn_cooldown_level": 0,
 			"offline_rate_level": 0,
 			"offline_cap_level": 0,
 			"lucky_merge_level": 0,
