@@ -137,17 +137,17 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 32
 text = "0"
 
-[node name="SettingsButton" type="Button" parent="TopBar/Margin/HBox"]
+[node name="MenuButton" type="Button" parent="TopBar/Margin/HBox"]
 custom_minimum_size = Vector2(56, 56)
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 4
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 22
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
-text = "⚙"
+text = "Menu"
 
 [node name="BottomBar" type="Panel" parent="."]
 anchors_preset = 12
@@ -174,18 +174,6 @@ theme_override_constants/margin_bottom = 12
 layout_mode = 2
 theme_override_constants/separation = 12
 alignment = 1
-
-[node name="CollectionButton" type="Button" parent="BottomBar/Margin/HBox"]
-custom_minimum_size = Vector2(160, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 22
-theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
-text = "📖 Collection"
 
 [node name="ShopButton" type="Button" parent="BottomBar/Margin/HBox"]
 custom_minimum_size = Vector2(160, 0)

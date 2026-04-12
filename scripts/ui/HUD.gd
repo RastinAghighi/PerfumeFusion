@@ -3,15 +3,12 @@ extends CanvasLayer
 const FRENZY_COOLDOWN: float = 300.0
 const FRENZY_DURATION: float = 30.0
 
-const EncyclopediaScene := preload("res://scenes/ui/Encyclopedia.tscn")
 const ShopScene := preload("res://scenes/ui/Shop.tscn")
-const SettingsScene := preload("res://scenes/ui/Settings.tscn")
 const InfoCardScene := preload("res://scenes/ui/InfoCard.tscn")
 
 @onready var essence_label: Label = $TopBar/Margin/HBox/EssenceBox/EssenceLabel
 @onready var essence_icon: Panel = $TopBar/Margin/HBox/EssenceBox/EssenceIcon
-@onready var settings_button: Button = $TopBar/Margin/HBox/SettingsButton
-@onready var collection_button: Button = $BottomBar/Margin/HBox/CollectionButton
+@onready var menu_button: Button = $TopBar/Margin/HBox/MenuButton
 @onready var shop_button: Button = $BottomBar/Margin/HBox/ShopButton
 @onready var buy_button: Button = $BottomBar/Margin/HBox/BuyButton
 @onready var grid_full_label: Label = $GridFullLabel
@@ -32,13 +29,12 @@ var _cooldown_label: Label = null
 func _ready() -> void:
 	add_to_group("hud")
 	EconomyManager.essence_changed.connect(_on_essence_changed)
-	collection_button.pressed.connect(_on_collection_pressed)
+	menu_button.pressed.connect(_on_menu_pressed)
 	shop_button.pressed.connect(_on_shop_pressed)
 	buy_button.pressed.connect(_on_buy_pressed)
-	settings_button.pressed.connect(_on_settings_pressed)
 	rare_drop_button.pressed.connect(_on_rare_drop_pressed)
 	frenzy_button.pressed.connect(_on_frenzy_pressed)
-	for btn in [collection_button, shop_button, buy_button, settings_button, rare_drop_button, frenzy_button]:
+	for btn in [menu_button, shop_button, buy_button, rare_drop_button, frenzy_button]:
 		btn.pressed.connect(AudioManager.play_button)
 	RareDropManager.rare_drop_available.connect(_on_rare_drop_available)
 	RareDropManager.rare_drop_expired.connect(_on_rare_drop_expired)
@@ -128,19 +124,13 @@ func show_grid_full_message(text: String = "Grid is full!") -> void:
 	tween.tween_property(grid_full_label, "modulate:a", 0.0, 0.4)
 
 
-func _on_collection_pressed() -> void:
-	var enc := EncyclopediaScene.instantiate()
-	get_tree().root.add_child(enc)
+func _on_menu_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/ui/MainMenu.tscn")
 
 
 func _on_shop_pressed() -> void:
 	var shop := ShopScene.instantiate()
 	get_tree().root.add_child(shop)
-
-
-func _on_settings_pressed() -> void:
-	var settings := SettingsScene.instantiate()
-	get_tree().root.add_child(settings)
 
 
 func _on_rare_drop_available() -> void:
