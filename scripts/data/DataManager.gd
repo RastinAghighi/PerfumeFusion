@@ -179,6 +179,23 @@ func get_accord_color(accord: String) -> Color:
 	return DEFAULT_COLOR
 
 
+func find_perfume(url: String, name: String, brand: String) -> Dictionary:
+	var url_key := url.strip_edges()
+	var name_key := name.strip_edges().to_lower()
+	var brand_key := brand.strip_edges().to_lower()
+	for i in range(1, TIER_COUNT + 1):
+		var bracket: Array = tier_brackets.get(i, [])
+		for perfume in bracket:
+			if typeof(perfume) != TYPE_DICTIONARY:
+				continue
+			if url_key != "" and String(perfume.get("url", "")) == url_key:
+				return perfume
+			if name_key != "" and String(perfume.get("name", "")).to_lower() == name_key \
+				and (brand_key == "" or String(perfume.get("brand", "")).to_lower() == brand_key):
+				return perfume
+	return {}
+
+
 func get_tier_count(tier: int) -> int:
 	if not tier_brackets.has(tier):
 		return 0

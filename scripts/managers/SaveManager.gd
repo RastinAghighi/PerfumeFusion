@@ -40,12 +40,43 @@ func get_default_data() -> Dictionary:
 
 
 func save_game() -> void:
+	_capture_grid_state()
 	var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	if file == null:
 		push_error("SaveManager: failed to open save file for writing: %s" % FileAccess.get_open_error())
 		return
 	file.store_string(JSON.stringify(data))
 	file.close()
+
+
+func _capture_grid_state() -> void:
+	var grid: Node = null
+	if SpawnManager != null:
+		grid = SpawnManager.grid_reference
+	if grid == null or not ("slots" in grid):
+		return
+	var slots: Array = grid.slots
+	var grid_state: Array = []
+	for i in range(25):
+		if i >= slots.size():
+			grid_state.append(null)
+			continue
+		var slot = slots[i]
+		if slot == null or slot.is_empty():
+			grid_state.append(null)
+			continue
+		var item = slot.occupied_item
+		if item == null or not ("tier" in item):
+			grid_state.append(null)
+			continue
+		var p_data: Dictionary = item.perfume_data
+		grid_state.append({
+			"tier": int(item.tier),
+			"name": String(p_data.get("name", "")),
+			"brand": String(p_data.get("brand", "")),
+			"url": String(p_data.get("url", "")),
+		})
+	data["grid_state"] = grid_state
 
 
 func load_game() -> Dictionary:

@@ -122,7 +122,7 @@ func _make_card(def: Dictionary, idx: int) -> PanelContainer:
 	left.add_child(desc_label)
 
 	var effect_label := Label.new()
-	effect_label.text = String(def["effect"])
+	effect_label.name = "EffectLabel"
 	effect_label.add_theme_font_size_override("font_size", 13)
 	effect_label.add_theme_color_override("font_color", Color(0.6, 0.55, 0.75, 1))
 	left.add_child(effect_label)
@@ -157,6 +157,7 @@ func _refresh() -> void:
 		var def: Dictionary = _upgrades[i]
 		var card: PanelContainer = _card_nodes[i]
 		var level_label: Label = _find_label(card, "LevelLabel")
+		var effect_label: Label = _find_label(card, "EffectLabel")
 		var buy_button: Button = _find_button(card, "BuyButton")
 		var max_level: int = int(def["max_level"])
 		var is_bool: bool = bool(def["is_bool"])
@@ -166,12 +167,24 @@ func _refresh() -> void:
 		else:
 			current_level = int(upgrades_data.get(def["key"], 0))
 
-		if is_bool:
-			level_label.text = "Owned" if current_level >= max_level else "Not Owned"
+		var segments: PackedStringArray = String(def["effect"]).split(" → ")
+		var is_maxed: bool = current_level >= max_level
+		if is_maxed:
+			if segments.size() > 0:
+				effect_label.text = "Current: %s" % segments[segments.size() - 1]
+			else:
+				effect_label.text = ""
 		else:
-			level_label.text = "Lv. %d/%d" % [current_level, max_level]
+			var cur_idx: int = min(current_level, segments.size() - 1)
+			var next_idx: int = min(current_level + 1, segments.size() - 1)
+			effect_label.text = "%s → %s" % [segments[cur_idx], segments[next_idx]]
 
-		if current_level >= max_level:
+		if is_bool:
+			level_label.text = "Owned" if is_maxed else "Not Owned"
+		else:
+			level_label.text = "MAX" if is_maxed else "Lv. %d" % current_level
+
+		if is_maxed:
 			buy_button.text = "MAX"
 			buy_button.disabled = true
 			buy_button.modulate = Color(0.7, 0.7, 0.7, 1)
