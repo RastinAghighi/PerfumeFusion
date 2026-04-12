@@ -117,6 +117,11 @@ func manual_spawn() -> bool:
 		manual_spawn_failed.emit("grid_full")
 		return false
 
+	if BattleManager.is_battle_active:
+		_try_spawn()
+		manual_spawn_succeeded.emit(0, EconomyManager.get_essence())
+		return true
+
 	var cost: int = get_manual_spawn_cost()
 	if cost > 0 and not EconomyManager.spend_essence(cost):
 		manual_spawn_failed.emit("not_enough_essence")
