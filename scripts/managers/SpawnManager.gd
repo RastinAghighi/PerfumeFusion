@@ -4,7 +4,13 @@ const PerfumeItemScene := preload("res://scenes/grid/PerfumeItem.tscn")
 
 const SPAWN_INTERVALS := [3.0, 2.5, 2.0, 1.5]
 const FRENZY_INTERVAL := 0.5
-const MANUAL_SPAWN_COST := 10
+const SPAWN_COST_TIERS := [
+	[5, 0],
+	[15, 10],
+	[30, 25],
+	[50, 50],
+	[-1, 100],
+]
 
 var spawn_interval: float = 5.0
 var spawn_timer: float = 5.0
@@ -94,35 +100,27 @@ func manual_spawn() -> bool:
 		manual_spawn_failed.emit("grid_full")
 		return false
 
-	var free_remaining: int = int(SaveManager.data.get("free_spawns_remaining", 0))
-	var is_free: bool = free_remaining > 0
-	var essence: int = int(SaveManager.data.get("essence", 0))
-
-	if not is_free and essence < MANUAL_SPAWN_COST:
+	var cost: int = get_manual_spawn_cost()
+	if cost > 0 and not EconomyManager.spend_essence(cost):
 		manual_spawn_failed.emit("not_enough_essence")
 		return false
 
 	_try_spawn()
 
-	if is_free:
-		free_remaining -= 1
-		SaveManager.data["free_spawns_remaining"] = free_remaining
-		print("Spawned! Free spawns left: ", free_remaining)
-	else:
-		essence -= MANUAL_SPAWN_COST
-		SaveManager.data["essence"] = essence
-		print("Spawned! Essence remaining: ", essence)
+	var total: int = int(SaveManager.data.get("total_spawns", 0)) + 1
+	SaveManager.data["total_spawns"] = total
 	SaveManager.save_game()
 
-	manual_spawn_succeeded.emit(free_remaining, int(SaveManager.data["essence"]))
+	manual_spawn_succeeded.emit(0, EconomyManager.get_essence())
 	return true
 
 
 func get_manual_spawn_cost() -> int:
-	var free_remaining: int = int(SaveManager.data.get("free_spawns_remaining", 0))
-	if free_remaining > 0:
-		return 0
-	return MANUAL_SPAWN_COST
+	var total: int = int(SaveManager.data.get("total_spawns", 0))
+	for tier in SPAWN_COST_TIERS:
+		if int(tier[0]) < 0 or total < int(tier[0]):
+			return int(tier[1])
+	return 100
 
 
 func start_frenzy(duration: float) -> void:

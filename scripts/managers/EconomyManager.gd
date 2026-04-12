@@ -59,7 +59,14 @@ func get_essence() -> int:
 
 
 func get_merge_reward(tier: int) -> int:
-	return 10 * tier
+	if tier <= 5:
+		return 5 * tier
+	elif tier <= 10:
+		return 8 * tier
+	elif tier <= 15:
+		return 12 * tier
+	else:
+		return 20 * tier
 
 
 func get_manual_buy_cost(tier: int) -> int:

@@ -1,6 +1,5 @@
 extends CanvasLayer
 
-const BUY_COST: int = 10
 const FRENZY_COOLDOWN: float = 300.0
 const FRENZY_DURATION: float = 30.0
 
@@ -47,6 +46,7 @@ func _ready() -> void:
 	frenzy_border.visible = false
 	frenzy_countdown.visible = false
 	_update_essence_label(EconomyManager.get_essence(), false)
+	_update_buy_button_text()
 	_update_frenzy_button_text()
 
 
@@ -65,6 +65,7 @@ func _process(delta: float) -> void:
 
 func _on_essence_changed(new_amount: int) -> void:
 	_update_essence_label(new_amount, true)
+	_update_buy_button_text()
 
 
 func _update_essence_label(amount: int, animate: bool) -> void:
@@ -78,13 +79,22 @@ func _update_essence_label(amount: int, animate: bool) -> void:
 	tween.tween_property(essence_label, "scale", Vector2.ONE, 0.15)
 
 
+func _update_buy_button_text() -> void:
+	var cost: int = SpawnManager.get_manual_spawn_cost()
+	if cost <= 0:
+		buy_button.text = "Spawn (Free)"
+	else:
+		buy_button.text = "Spawn ✦%d" % cost
+
+
 func _on_buy_pressed() -> void:
 	if SpawnManager.grid_reference == null:
 		return
 	if SpawnManager.grid_reference.is_full():
 		show_grid_full_message("Grid is full!")
 		return
-	if not EconomyManager.spend_essence(BUY_COST):
+	var cost: int = SpawnManager.get_manual_spawn_cost()
+	if cost > 0 and not EconomyManager.spend_essence(cost):
 		return
 	var perfume_data: Dictionary = SpawnManager._try_spawn()
 	if not perfume_data.is_empty():
@@ -96,7 +106,10 @@ func _on_buy_pressed() -> void:
 			var card := InfoCardScene.instantiate()
 			get_tree().root.add_child(card)
 			card.show_perfume(perfume_data, 1)
+	var total: int = int(SaveManager.data.get("total_spawns", 0)) + 1
+	SaveManager.data["total_spawns"] = total
 	SaveManager.save_game()
+	_update_buy_button_text()
 
 
 func show_grid_full_message(text: String = "Grid is full!") -> void:

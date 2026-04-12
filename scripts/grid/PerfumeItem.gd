@@ -4,11 +4,16 @@ var tier: int = 0
 var perfume_data: Dictionary = {}
 
 const DRAG_THRESHOLD: float = 10.0
+const DOUBLE_CLICK_TIME_MS: int = 300
+const DOUBLE_CLICK_DIST: float = 10.0
 
 var is_pressed: bool = false
 var is_dragging: bool = false
 var press_global_pos: Vector2 = Vector2.ZERO
 var original_slot: Node = null
+
+var _last_click_time: int = 0
+var _last_click_pos: Vector2 = Vector2.ZERO
 
 
 func _ready() -> void:
@@ -57,6 +62,15 @@ func _gui_input(event: InputEvent) -> void:
 		if event.pressed:
 			should_press = true
 	if should_press:
+		var now := Time.get_ticks_msec()
+		var pos := get_global_mouse_position()
+		if now - _last_click_time <= DOUBLE_CLICK_TIME_MS and pos.distance_to(_last_click_pos) <= DOUBLE_CLICK_DIST:
+			_last_click_time = 0
+			_show_info_card()
+			accept_event()
+			return
+		_last_click_time = now
+		_last_click_pos = pos
 		_begin_press()
 		accept_event()
 
@@ -174,3 +188,10 @@ func _force_return_to_origin() -> void:
 	z_index = 0
 	original_slot.place_item(self)
 	original_slot = null
+
+
+func _show_info_card() -> void:
+	var scene := preload("res://scenes/ui/InfoCard.tscn")
+	var card := scene.instantiate()
+	get_tree().root.add_child(card)
+	card.show_perfume(perfume_data, tier)
