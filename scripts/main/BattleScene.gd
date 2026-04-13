@@ -3,6 +3,7 @@ extends Control
 const HUDScene := preload("res://scenes/ui/HUD.tscn")
 const PerfumeItemScene := preload("res://scenes/grid/PerfumeItem.tscn")
 const BattleResultScene := preload("res://scenes/ui/BattleResult.tscn")
+const OpponentIntroScene := preload("res://scenes/ui/OpponentIntro.tscn")
 
 @onready var grid: Node = $MarginContainer/VBoxContainer/Grid
 @onready var sell_zone: Node = $MarginContainer/VBoxContainer/SellZone
@@ -58,13 +59,12 @@ func _ready() -> void:
 
 	_setup_combo_ui()
 
-	BattleManager.start_battle(current_opponent)
 	BattleManager.damage_dealt.connect(_on_damage_dealt)
 	BattleManager.opponent_defeated.connect(_on_opponent_defeated)
 	BattleManager.combo_updated.connect(_on_combo_updated)
 	MergeManager.merge_completed.connect(_on_merge_completed)
 
-	battle_active = true
+	_show_opponent_intro()
 
 
 func _process(delta: float) -> void:
@@ -242,6 +242,18 @@ func _show_damage_number(amount: float, is_super_effective: bool, is_resisted: b
 		etween.tween_property(effect_label, "modulate:a", 0.0, 0.4)
 
 	tween.chain().tween_callback(layer.queue_free)
+
+
+func _show_opponent_intro() -> void:
+	var intro := OpponentIntroScene.instantiate()
+	add_child(intro)
+	intro.setup(current_opponent)
+	intro.intro_finished.connect(_on_intro_finished)
+
+
+func _on_intro_finished() -> void:
+	BattleManager.start_battle(current_opponent)
+	battle_active = true
 
 
 func _setup_combo_ui() -> void:
