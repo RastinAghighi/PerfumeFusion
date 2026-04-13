@@ -4,8 +4,7 @@ venv/
 .venv/
 env/
 
-# Scraper output (uncomment if files get too large to commit)
-# data/*.json
+# Scraper output
 data/failed_urls.txt
 
 # Editor
