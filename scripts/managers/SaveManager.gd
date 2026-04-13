@@ -39,6 +39,13 @@ func get_default_data() -> Dictionary:
 		},
 		"tutorial_completed": false,
 		"beaten_opponents": [],
+		"battle_stats": {
+			"total_battles": 0,
+			"total_victories": 0,
+			"total_defeats": 0,
+			"fastest_victory": {},
+			"highest_combo": 0,
+		},
 	}
 
 
@@ -106,6 +113,45 @@ func _merge_defaults(loaded: Dictionary, defaults: Dictionary) -> Dictionary:
 		elif typeof(defaults[key]) == TYPE_DICTIONARY and typeof(loaded[key]) == TYPE_DICTIONARY:
 			loaded[key] = _merge_defaults(loaded[key], defaults[key])
 	return loaded
+
+
+func mark_opponent_beaten(id: int) -> void:
+	var beaten: Array = data.get("beaten_opponents", [])
+	if not beaten.has(id):
+		beaten.append(id)
+		data["beaten_opponents"] = beaten
+		save_game()
+
+
+func is_opponent_beaten(id: int) -> bool:
+	var beaten: Array = data.get("beaten_opponents", [])
+	return id in beaten
+
+
+func get_beaten_count() -> int:
+	return data.get("beaten_opponents", []).size()
+
+
+func update_battle_stats(opponent_id: int, won: bool, time_taken: float, max_combo: int) -> void:
+	var bs: Dictionary = data.get("battle_stats", {})
+	bs["total_battles"] = int(bs.get("total_battles", 0)) + 1
+	if won:
+		bs["total_victories"] = int(bs.get("total_victories", 0)) + 1
+	else:
+		bs["total_defeats"] = int(bs.get("total_defeats", 0)) + 1
+
+	if won:
+		var fastest: Dictionary = bs.get("fastest_victory", {})
+		var key: String = str(opponent_id)
+		if not fastest.has(key) or time_taken < float(fastest[key]):
+			fastest[key] = time_taken
+		bs["fastest_victory"] = fastest
+
+	if max_combo > int(bs.get("highest_combo", 0)):
+		bs["highest_combo"] = max_combo
+
+	data["battle_stats"] = bs
+	save_game()
 
 
 func set_logout_time() -> void:

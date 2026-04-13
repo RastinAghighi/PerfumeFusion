@@ -182,6 +182,19 @@ func _create_card(opponent: Dictionary, is_unlocked: bool, is_beaten: bool) -> P
 	reward_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	right_vbox.add_child(reward_label)
 
+	if is_beaten:
+		var bs: Dictionary = SaveManager.data.get("battle_stats", {})
+		var fastest: Dictionary = bs.get("fastest_victory", {})
+		var key: String = str(int(opponent["id"]))
+		if fastest.has(key):
+			var t: float = float(fastest[key])
+			var best_label := Label.new()
+			best_label.text = "Best: %d:%02d" % [int(t) / 60, int(t) % 60]
+			best_label.add_theme_color_override("font_color", Color(0.3, 0.75, 0.4, 0.9))
+			best_label.add_theme_font_size_override("font_size", 13)
+			best_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+			right_vbox.add_child(best_label)
+
 	if is_unlocked:
 		var btn := Button.new()
 		btn.text = "Fight!" if not is_beaten else "Rematch"

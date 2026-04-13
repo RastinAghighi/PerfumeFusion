@@ -33,12 +33,12 @@ func show_victory(opponent: Dictionary, stats: Dictionary) -> void:
 	rewards_box.visible = true
 	essence_label.text = "+%d Essence" % reward
 
-	var beaten: Array = SaveManager.data.get("beaten_opponents", [])
 	var opp_id: int = int(opponent.get("id", -1))
-	if not beaten.has(opp_id):
-		beaten.append(opp_id)
-		SaveManager.data["beaten_opponents"] = beaten
-		SaveManager.save_game()
+	var was_beaten: bool = SaveManager.is_opponent_beaten(opp_id)
+	SaveManager.mark_opponent_beaten(opp_id)
+	SaveManager.update_battle_stats(opp_id, true, stats.get("time_taken", 0.0), int(stats.get("max_combo", 0)))
+
+	if not was_beaten:
 		unlock_label.text = "NEW! Next opponent unlocked!"
 		unlock_label.visible = true
 	else:
@@ -60,6 +60,9 @@ func show_defeat(opponent: Dictionary, stats: Dictionary) -> void:
 	opponent_label.text = "%s wins..." % opp_name
 
 	_populate_stats(stats, false)
+
+	var opp_id: int = int(opponent.get("id", -1))
+	SaveManager.update_battle_stats(opp_id, false, 0.0, int(stats.get("max_combo", 0)))
 
 	rewards_box.visible = false
 
