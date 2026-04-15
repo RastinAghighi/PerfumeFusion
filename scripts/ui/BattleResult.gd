@@ -87,8 +87,10 @@ func _populate_stats(stats: Dictionary, is_victory: bool) -> void:
 
 
 func _go_battle_select() -> void:
+	BattleManager.end_battle()
 	get_tree().change_scene_to_file("res://scenes/ui/BattleSelect.tscn")
 
 
 func _replay() -> void:
+	BattleManager.end_battle()
 	get_tree().change_scene_to_file("res://scenes/main/BattleScene.tscn")

@@ -10,50 +10,66 @@ corner_radius_bottom_right = 12
 corner_radius_bottom_left = 12
 
 [node name="PerfumeItem" type="Control"]
-custom_minimum_size = Vector2(170, 170)
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_right = 170.0
-offset_bottom = 170.0
-mouse_filter = 1
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 0
 script = ExtResource("1_script")
 
 [node name="BottleShape" type="Panel" parent="."]
-offset_left = 25.0
-offset_top = 10.0
-offset_right = 145.0
-offset_bottom = 160.0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = -6.0
+offset_bottom = -6.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_bottle")
 
 [node name="TierLabel" type="Label" parent="."]
-offset_left = 30.0
-offset_top = 12.0
-offset_right = 90.0
-offset_bottom = 44.0
-theme_override_font_sizes/font_size = 24
+anchor_right = 1.0
+offset_left = 8.0
+offset_top = 6.0
+offset_right = -8.0
+offset_bottom = 28.0
+theme_override_font_sizes/font_size = 16
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_constants/outline_size = 2
 text = "T1"
 
 [node name="NameLabel" type="Label" parent="."]
-offset_left = 5.0
-offset_top = 130.0
-offset_right = 165.0
-offset_bottom = 148.0
-theme_override_font_sizes/font_size = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = -32.0
+offset_right = -4.0
+offset_bottom = -16.0
+theme_override_font_sizes/font_size = 10
 text = "Name"
 horizontal_alignment = 1
 text_overrun_behavior = 3
 clip_text = true
 
 [node name="BrandLabel" type="Label" parent="."]
-offset_left = 5.0
-offset_top = 148.0
-offset_right = 165.0
-offset_bottom = 164.0
-theme_override_font_sizes/font_size = 10
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = -16.0
+offset_right = -4.0
+offset_bottom = -2.0
+theme_override_font_sizes/font_size = 9
 theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
 text = "Brand"
 horizontal_alignment = 1

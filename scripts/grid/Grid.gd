@@ -108,6 +108,7 @@ func _return_to_origin(item) -> void:
 	item.z_index = 0
 	origin.place_item(item)
 	item.original_slot = null
+	_debug_print_item(item, origin)
 
 
 func _place_in_slot(item, target_slot) -> void:
@@ -117,6 +118,21 @@ func _place_in_slot(item, target_slot) -> void:
 	item.z_index = 0
 	target_slot.place_item(item)
 	item.original_slot = null
+	_debug_print_item(item, target_slot)
+
+
+func _debug_print_item(item, slot) -> void:
+	print("=== ITEM DEBUG ===")
+	print("Item size: ", item.size)
+	print("Item min size: ", item.custom_minimum_size)
+	print("Item visible: ", item.visible)
+	print("Item position: ", item.position)
+	print("Item anchors: ", item.anchor_left, item.anchor_top, item.anchor_right, item.anchor_bottom)
+	print("Slot size: ", slot.size)
+	print("Slot min size: ", slot.custom_minimum_size)
+	print("Slot child count: ", slot.get_child_count())
+	for child in slot.get_children():
+		print("  Slot child: ", child.name, " size: ", child.size, " visible: ", child.visible)
 
 
 func get_empty_slots() -> Array:
