@@ -1,9 +1,6 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/OpponentIntro.gd" id="1_script"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
-bg_color = Color(0.04, 0.03, 0.08, 0.85)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_portrait"]
 bg_color = Color(0.18, 0.14, 0.25, 1)
@@ -19,176 +16,110 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_script")
 
-[node name="Background" type="Panel" parent="."]
+[node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_bg")
+color = Color(0, 0, 0, 0.75)
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
+[node name="Center" type="CenterContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-horizontal_scroll_mode = 0
+mouse_filter = 2
 
-[node name="CenterMargin" type="MarginContainer" parent="ScrollContainer"]
+[node name="VBox" type="VBoxContainer" parent="Center"]
+custom_minimum_size = Vector2(420, 0)
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_constants/margin_left = 30
-theme_override_constants/margin_right = 30
-theme_override_constants/margin_top = 40
-theme_override_constants/margin_bottom = 40
+mouse_filter = 2
+theme_override_constants/separation = 10
 
-[node name="Center" type="CenterContainer" parent="ScrollContainer/CenterMargin"]
+[node name="ChallLabel" type="Label" parent="Center/VBox"]
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="VBox" type="VBoxContainer" parent="ScrollContainer/CenterMargin/Center"]
-layout_mode = 2
-theme_override_constants/separation = 25
-
-[node name="ChallLabel" type="Label" parent="ScrollContainer/CenterMargin/Center/VBox"]
-layout_mode = 2
+mouse_filter = 2
 theme_override_colors/font_color = Color(0.65, 0.6, 0.75, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 14
 text = "CHALLENGER APPROACHING"
 horizontal_alignment = 1
 
-[node name="TopSpacer" type="Control" parent="ScrollContainer/CenterMargin/Center/VBox"]
-custom_minimum_size = Vector2(0, 20)
-layout_mode = 2
-
-[node name="Portrait" type="PanelContainer" parent="ScrollContainer/CenterMargin/Center/VBox"]
-custom_minimum_size = Vector2(200, 200)
+[node name="Portrait" type="PanelContainer" parent="Center/VBox"]
+custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_portrait")
 
-[node name="InitialsLabel" type="Label" parent="ScrollContainer/CenterMargin/Center/VBox/Portrait"]
+[node name="InitialsLabel" type="Label" parent="Center/VBox/Portrait"]
 layout_mode = 2
+mouse_filter = 2
 theme_override_colors/font_color = Color(0.75, 0.65, 0.9, 1)
-theme_override_font_sizes/font_size = 72
+theme_override_font_sizes/font_size = 40
 text = "??"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="NameLabel" type="Label" parent="ScrollContainer/CenterMargin/Center/VBox"]
+[node name="NameLabel" type="Label" parent="Center/VBox"]
 layout_mode = 2
+mouse_filter = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 24
 text = "Opponent Name"
 horizontal_alignment = 1
 
-[node name="TitleLabel" type="Label" parent="ScrollContainer/CenterMargin/Center/VBox"]
+[node name="TitleLabel" type="Label" parent="Center/VBox"]
 layout_mode = 2
+mouse_filter = 2
 theme_override_colors/font_color = Color(0.7, 0.6, 0.85, 1)
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 14
 text = "\"The Title\""
 horizontal_alignment = 1
 
-[node name="DescLabel" type="Label" parent="ScrollContainer/CenterMargin/Center/VBox"]
-custom_minimum_size = Vector2(0, 0)
+[node name="DescLabel" type="Label" parent="Center/VBox"]
+custom_minimum_size = Vector2(420, 0)
 layout_mode = 2
 size_flags_horizontal = 4
+mouse_filter = 2
 theme_override_colors/font_color = Color(0.75, 0.72, 0.8, 1)
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 12
 text = "Opponent description goes here."
 horizontal_alignment = 1
 autowrap_mode = 2
+max_lines_visible = 2
 
-[node name="Separator" type="HSeparator" parent="ScrollContainer/CenterMargin/Center/VBox"]
+[node name="StatsLabel" type="Label" parent="Center/VBox"]
 layout_mode = 2
-
-[node name="StatsRow" type="HBoxContainer" parent="ScrollContainer/CenterMargin/Center/VBox"]
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_constants/separation = 0
-alignment = 1
-
-[node name="HPBox" type="VBoxContainer" parent="ScrollContainer/CenterMargin/Center/VBox/StatsRow"]
-layout_mode = 2
-alignment = 1
-
-[node name="HPTitle" type="Label" parent="ScrollContainer/CenterMargin/Center/VBox/StatsRow/HPBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.6, 0.55, 0.7, 1)
-theme_override_font_sizes/font_size = 12
-text = "HP"
-horizontal_alignment = 1
-
-[node name="HPValue" type="Label" parent="ScrollContainer/CenterMargin/Center/VBox/StatsRow/HPBox"]
-layout_mode = 2
+mouse_filter = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 24
-text = "1000"
+theme_override_font_sizes/font_size = 14
+text = "HP: 100 | Time: 2:00"
 horizontal_alignment = 1
 
-[node name="StatsSpacer" type="Control" parent="ScrollContainer/CenterMargin/Center/VBox/StatsRow"]
-custom_minimum_size = Vector2(40, 0)
-layout_mode = 2
-
-[node name="TimeBox" type="VBoxContainer" parent="ScrollContainer/CenterMargin/Center/VBox/StatsRow"]
-layout_mode = 2
-alignment = 1
-
-[node name="TimeTitle" type="Label" parent="ScrollContainer/CenterMargin/Center/VBox/StatsRow/TimeBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.6, 0.55, 0.7, 1)
-theme_override_font_sizes/font_size = 12
-text = "TIME"
-horizontal_alignment = 1
-
-[node name="TimeValue" type="Label" parent="ScrollContainer/CenterMargin/Center/VBox/StatsRow/TimeBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 24
-text = "2:00"
-horizontal_alignment = 1
-
-[node name="WeakRow" type="HBoxContainer" parent="ScrollContainer/CenterMargin/Center/VBox"]
+[node name="TagsLabel" type="Label" parent="Center/VBox"]
+custom_minimum_size = Vector2(420, 0)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_constants/separation = 10
-alignment = 1
-
-[node name="WeakHint" type="Label" parent="ScrollContainer/CenterMargin/Center/VBox/WeakRow"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.4, 0.8, 0.4, 1)
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.85, 1)
 theme_override_font_sizes/font_size = 12
-text = "← weak"
+text = "Weak: — | Resists: —"
+horizontal_alignment = 1
+autowrap_mode = 2
 
-[node name="ResistRow" type="HBoxContainer" parent="ScrollContainer/CenterMargin/Center/VBox"]
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_constants/separation = 10
-alignment = 1
-
-[node name="ResistHint" type="Label" parent="ScrollContainer/CenterMargin/Center/VBox/ResistRow"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.45, 0.45, 1)
-theme_override_font_sizes/font_size = 12
-text = "← resists"
-
-[node name="BottomSpacer" type="Control" parent="ScrollContainer/CenterMargin/Center/VBox"]
-custom_minimum_size = Vector2(0, 30)
-layout_mode = 2
-
-[node name="FightButton" type="Button" parent="ScrollContainer/CenterMargin/Center/VBox"]
-custom_minimum_size = Vector2(200, 60)
+[node name="FightButton" type="Button" parent="Center/VBox"]
+custom_minimum_size = Vector2(220, 60)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 24
 text = "FIGHT!"
 
-[connection signal="pressed" from="ScrollContainer/CenterMargin/Center/VBox/FightButton" to="." method="_on_fight_pressed"]
+[connection signal="pressed" from="Center/VBox/FightButton" to="." method="_on_fight_pressed"]

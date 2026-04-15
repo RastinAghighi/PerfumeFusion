@@ -341,9 +341,11 @@ func _show_damage_number(amount: float, is_super_effective: bool, is_resisted: b
 
 	var container := Control.new()
 	container.set_anchors_preset(Control.PRESET_FULL_RECT)
+	container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	layer.add_child(container)
 
 	var damage_label := Label.new()
+	damage_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	damage_label.text = str(int(amount))
 	damage_label.add_theme_font_size_override("font_size", 48)
 	damage_label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
@@ -370,6 +372,7 @@ func _show_damage_number(amount: float, is_super_effective: bool, is_resisted: b
 
 	if is_super_effective and not is_resisted:
 		var effect_label := Label.new()
+		effect_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		effect_label.text = "SUPER EFFECTIVE!"
 		effect_label.add_theme_font_size_override("font_size", 32)
 		effect_label.add_theme_color_override("font_color", Color(0.3, 1.0, 0.3, 1.0))
@@ -387,6 +390,7 @@ func _show_damage_number(amount: float, is_super_effective: bool, is_resisted: b
 		etween.tween_property(effect_label, "modulate:a", 0.0, 0.4)
 	elif is_resisted and not is_super_effective:
 		var effect_label := Label.new()
+		effect_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		effect_label.text = "RESISTED..."
 		effect_label.add_theme_font_size_override("font_size", 32)
 		effect_label.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6, 1.0))
