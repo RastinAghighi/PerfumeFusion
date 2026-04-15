@@ -125,6 +125,7 @@ func show_grid_full_message(text: String = "Grid is full!") -> void:
 
 
 func _on_menu_pressed() -> void:
+	SaveManager.save_game()
 	get_tree().change_scene_to_file("res://scenes/ui/MainMenu.tscn")
 
 

@@ -52,6 +52,11 @@ func get_default_data() -> Dictionary:
 func save_game() -> void:
 	if not BattleManager.is_battle_active:
 		_capture_grid_state()
+	var occupied := 0
+	for entry in data.get("grid_state", []):
+		if entry != null:
+			occupied += 1
+	print("Saving grid. Occupied slots: ", occupied)
 	var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	if file == null:
 		push_error("SaveManager: failed to open save file for writing: %s" % FileAccess.get_open_error())

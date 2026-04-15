@@ -63,3 +63,7 @@ func _check_offline_earnings() -> void:
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST or what == NOTIFICATION_EXIT_TREE:
 		SaveManager.set_logout_time()
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		SaveManager.save_game()
+	if what == NOTIFICATION_PREDELETE:
+		SaveManager.save_game()
