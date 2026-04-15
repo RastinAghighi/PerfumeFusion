@@ -5,6 +5,17 @@ signal intro_finished
 @onready var vbox: VBoxContainer = $ScrollContainer/CenterMargin/Center/VBox
 
 
+func _ready() -> void:
+	print("OpponentIntro _ready — children of VBox:")
+	for child in vbox.get_children():
+		print("  ", child.name, " - ", child.get_class())
+	var fb: Button = vbox.get_node("FightButton") as Button
+	print("FightButton found: ", fb, " connections: ", fb.pressed.get_connections())
+	if not fb.pressed.is_connected(_on_fight_pressed):
+		fb.pressed.connect(_on_fight_pressed)
+		print("Connected FightButton.pressed in _ready")
+
+
 func setup(opponent: Dictionary) -> void:
 	var opp_name: String = str(opponent.get("name", "???"))
 	var title: String = str(opponent.get("title", ""))
@@ -83,6 +94,8 @@ func _create_tag(text: String, font_color: Color, bg_color: Color) -> PanelConta
 
 
 func _on_fight_pressed() -> void:
+	print("FIGHT button pressed")
+	print("FIGHT! Starting battle...")
 	vbox.get_node("FightButton").disabled = true
 	var tween := create_tween()
 	tween.tween_property(self, "modulate:a", 0.0, 0.3)
