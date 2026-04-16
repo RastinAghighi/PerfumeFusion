@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=3 uid="uid://bplayerchar001"]
+
+[ext_resource type="Script" path="res://scripts/effects/PlayerCharacter.gd" id="1_player"]
+
+[node name="PlayerCharacter" type="Node2D"]
+z_index = 5
+script = ExtResource("1_player")
+
+[node name="Body" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-14, -28, 14, -28, 18, 0, 14, 28, -14, 28, -18, 0)
+color = Color(0.3, 0.9, 0.4, 1)
+
+[node name="Outline" type="Line2D" parent="Body"]
+points = PackedVector2Array(-14, -28, 14, -28, 18, 0, 14, 28, -14, 28, -18, 0, -14, -28)
+width = 2.0
+default_color = Color(0.05, 0.2, 0.1, 1)
+
+[node name="Label" type="Label" parent="."]
+offset_left = -30.0
+offset_top = 34.0
+offset_right = 30.0
+offset_bottom = 54.0
+theme_override_colors/font_color = Color(0.8, 1, 0.8, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 14
+text = "You"
+horizontal_alignment = 1
+vertical_alignment = 1

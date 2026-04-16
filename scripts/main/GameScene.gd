@@ -7,6 +7,9 @@ const PerfumeItemScene := preload("res://scenes/grid/PerfumeItem.tscn")
 
 
 func _ready() -> void:
+	var road_path = preload("res://scenes/effects/RoadPath.tscn").instantiate()
+	add_child(road_path)
+	road_path.z_index = 1
 	SaveManager.data = SaveManager.load_game()
 	var grid: Node = $MarginContainer/VBoxContainer/Grid
 	grid.sell_zone = $MarginContainer/VBoxContainer/SellZone
