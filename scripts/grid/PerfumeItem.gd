@@ -22,6 +22,7 @@ func _ready() -> void:
 	$NameLabel.mouse_filter = MOUSE_FILTER_IGNORE
 	$BrandLabel.mouse_filter = MOUSE_FILTER_IGNORE
 	$BottleShape.mouse_filter = MOUSE_FILTER_IGNORE
+	$BottleImage.mouse_filter = MOUSE_FILTER_IGNORE
 
 
 func setup(p_tier: int, p_data: Dictionary) -> void:
@@ -49,6 +50,16 @@ func setup(p_tier: int, p_data: Dictionary) -> void:
 		style.corner_radius_bottom_left = 12
 	style.bg_color = color
 	$BottleShape.add_theme_stylebox_override("panel", style)
+
+	var image_path = "res://assets/art/bottles/" + p_data.get("name", "") + ".png"
+	if ResourceLoader.exists(image_path):
+		var texture = load(image_path)
+		$BottleImage.texture = texture
+		$BottleImage.visible = true
+		$BottleShape.visible = false
+	else:
+		$BottleImage.visible = false
+		$BottleShape.visible = true
 
 
 func _gui_input(event: InputEvent) -> void:
