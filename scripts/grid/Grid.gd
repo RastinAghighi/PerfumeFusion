@@ -70,7 +70,7 @@ func attempt_drop(item, target_slot, drop_position: Vector2 = Vector2.ZERO) -> v
 		_place_in_slot(item, target_slot)
 		return
 	var other = target_slot.occupied_item
-	if other != null and "tier" in other and other.tier == item.tier:
+	if other != null and "tier" in other and other.tier == item.tier and other.perfume_data.get("name", "") == item.perfume_data.get("name", ""):
 		var success: bool = MergeManager.execute_merge(item, other, target_slot, self)
 		if not success:
 			_return_to_origin(item)

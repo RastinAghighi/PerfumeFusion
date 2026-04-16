@@ -51,10 +51,9 @@ func setup(p_tier: int, p_data: Dictionary) -> void:
 	style.bg_color = color
 	$BottleShape.add_theme_stylebox_override("panel", style)
 
-	var image_path = "res://assets/art/bottles/" + p_data.get("name", "") + ".png"
+	var image_path = "res://assets/art/bottles/" + String(p_data.get("name", "")) + ".png"
 	if ResourceLoader.exists(image_path):
-		var texture = load(image_path)
-		$BottleImage.texture = texture
+		$BottleImage.texture = load(image_path)
 		$BottleImage.visible = true
 		$BottleShape.visible = false
 	else:

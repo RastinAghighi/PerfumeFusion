@@ -14,6 +14,8 @@ func execute_merge(item_a, item_b, target_slot, _grid) -> bool:
 		return false
 	if item_a.tier != item_b.tier:
 		return false
+	if item_a.perfume_data.get("name", "") != item_b.perfume_data.get("name", ""):
+		return false
 
 	var new_tier: int = item_a.tier + 1
 	if new_tier > MAX_TIER:
